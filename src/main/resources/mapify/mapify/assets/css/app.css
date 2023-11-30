@@ -1,0 +1,16 @@
+#sideBar {
+    -fx-background-color:  #f5f4ff;
+}
+#downBar {
+    -fx-background-color:  #f5f4ff;
+    -fx-background-radius: 15px;
+}
+#searchBar {
+    -fx-background-color: #f5f4ff;
+    -fx-background-radius: 20px;
+    -fx-padding: 10px;
+}
+.button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10px;
+}

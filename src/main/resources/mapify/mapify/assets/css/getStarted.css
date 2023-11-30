@@ -1,0 +1,45 @@
+#heroContainer {
+    -fx-padding: 60px;
+    -fx-alignment: center;
+    -fx-spacing: 60px;
+}
+#heroContent {
+    -fx-padding: 48px 5px 48px 5px;
+    -fx-spacing: 14px;
+    -fx-alignment: center;
+}
+.heroHeading {
+    -fx-font-size: 42px;
+    -fx-font-family: Poppins;
+    -fx-font-weight: 700;
+}
+#subHeading {
+    -fx-font-size: 16px;
+    -fx-font-family: Poppins;
+    -fx-fill: #424242;
+}
+#heroHeading2 {
+    -fx-text-fill: linear-gradient(to right, rgba(74,72,255,1), rgba(157,10,255,1));
+}
+
+#start_btn_container {
+    -fx-background-color: #4a48ff;
+    -fx-background-radius: 10px;
+}
+#start_btn_content {
+    -fx-spacing: 5px;
+    -fx-alignment: center;
+}
+#start_btn_text {
+    -fx-font-family: Poppins;
+    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff;
+}
+.logoContainer {
+    -fx-spacing: 5px;
+    -fx-alignment: center-left;
+}
+.logoTitle {
+    -fx-font-family: "Outfit Medium";
+    -fx-font-size: 20px ;
+}
