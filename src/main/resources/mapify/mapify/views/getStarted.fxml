@@ -11,11 +11,11 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="674.0" prefWidth="1096.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapify.mapify.GetStartedController">
+<AnchorPane fx:id="background" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapify.mapify.GetStartedController">
    <children>
-      <ImageView fitHeight="518.0" fitWidth="430.0" layoutX="622.0" layoutY="122.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="122.79999999999995" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="122.0">
+      <ImageView fitHeight="462.0" fitWidth="465.0" layoutX="713.0" layoutY="139.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="99.39999999999998" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="139.0">
          <image>
-            <Image url="@../assets/images/map4.png" />
+            <Image url="@../assets/images/map6.png" />
          </image>
       </ImageView>
       <VBox fx:id="heroContent" layoutX="87.0" layoutY="99.0" prefHeight="476.0" prefWidth="546.0" stylesheets="@../assets/css/getStarted.css" AnchorPane.bottomAnchor="99.40000000000009" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="463.4" AnchorPane.topAnchor="99.0">
@@ -49,7 +49,7 @@
                   </TextFlow>
                </children>
             </HBox>
-            <VBox prefHeight="47.0" prefWidth="521.0">
+            <HBox prefHeight="47.0" prefWidth="536.0" spacing="10.0">
                <children>
                   <Button fx:id="start_btn_container" mnemonicParsing="false" onAction="#switchToAppScene" prefHeight="46.0" prefWidth="159.0">
                      <graphic>
@@ -66,7 +66,7 @@
                      </graphic>
                   </Button>
                </children>
-            </VBox>
+            </HBox>
          </children>
       </VBox>
    </children>

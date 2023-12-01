@@ -1,18 +1,12 @@
 package mapify.mapify;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,7 +16,9 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
-    public VBox sideBar;
+    @FXML
+    public VBox sideBarContent;
+
     @FXML
     private WebView mapView;
     private WebEngine engine;
@@ -31,6 +27,16 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         engine = mapView.getEngine();
         engine.load(Objects.requireNonNull(getClass().getResource("/scripts/mapView1.html")).toExternalForm());
+        loadSideBarComponent();
+    }
+    private void loadSideBarComponent() {
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/fileChooser.fxml")));
+            Node node = loader.load();
+            sideBarContent.getChildren().add(node);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

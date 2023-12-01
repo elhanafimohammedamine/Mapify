@@ -12,10 +12,11 @@ import java.util.Objects;
 
 public class GetStartedController {
     public void switchToAppScene(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("views/app.fxml")));
-        Stage stage = (Stage) ((Node) (event.getSource())).getScene().getWindow();
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/mapify/mapify/assets/css/getStarted.css")).toExternalForm());
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("views/app.fxml"));
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/mapify/mapify/assets/css/app.css")).toExternalForm());
         stage.setTitle("Mapify");
         stage.show();
     }

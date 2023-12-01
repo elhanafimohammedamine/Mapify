@@ -25,10 +25,14 @@
 #start_btn_container {
     -fx-background-color: #4a48ff;
     -fx-background-radius: 10px;
+    -fx-cursor: hand;
 }
 #start_btn_content {
     -fx-spacing: 5px;
     -fx-alignment: center;
+}
+#start_btn_container:hover {
+    -fx-background-color: #3a37f2;
 }
 #start_btn_text {
     -fx-font-family: Poppins;
@@ -43,3 +47,7 @@
     -fx-font-family: "Outfit Medium";
     -fx-font-size: 20px ;
 }
+#background {
+    -fx-background-image: url("../images/bg.png");
+}
+
