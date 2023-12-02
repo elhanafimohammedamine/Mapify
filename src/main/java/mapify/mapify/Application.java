@@ -18,7 +18,7 @@ public class Application extends javafx.application.Application {
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/mapify/mapify/assets/css/getStarted.css")).toExternalForm());
         stage.setTitle("Mapify");
         stage.setScene(scene);
-        Image appIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/mapify/mapify/assets/images/Mapify3.png")));
+        Image appIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/mapify/mapify/assets/images/Mapify.png")));
         stage.getIcons().add(appIcon);
         stage.setResizable(false);
         stage.show();

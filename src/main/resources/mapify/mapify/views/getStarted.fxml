@@ -22,9 +22,9 @@
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="536.0" styleClass="logoContainer">
                <children>
-                  <ImageView fitHeight="56.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="51.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../assets/images/Mapify1.png" />
+                        <Image url="@../assets/images/map8.png" />
                      </image>
                   </ImageView>
                   <Label prefHeight="50.0" prefWidth="110.0" styleClass="logoTitle" text="Mapify" />
@@ -58,7 +58,7 @@
                               <Label fx:id="start_btn_text" prefHeight="38.0" prefWidth="82.0" text="Get Started" />
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../assets/images/icons/icons8-flèche-droite-96.png" />
+                                    <Image url="@../assets/images/icons/icons8-droite-100.png" />
                                  </image>
                               </ImageView>
                            </children>

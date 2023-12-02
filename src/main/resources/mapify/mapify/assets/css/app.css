@@ -1,23 +1,28 @@
 #sideBarContainer {
-    -fx-background-color:  #ffffff;
-    -fx-padding: 10px;
+    -fx-background-color:  #eff1ff;
+    -fx-padding: 20px 10px 20px 10px;
     -fx-alignment: center;
     -fx-spacing: 10px;
 }
 #sideBarContent {
     -fx-alignment: center;
 }
-.sideBarHeading {
+.mainHeading {
     -fx-font-size: 16px;
     -fx-font-family: Poppins;
     -fx-font-weight: 700;
+    -fx-text-fill: #26224a;
+}
+.mainHeadingLine {
+    -fx-fill: #26224a;
+    -fx-background-radius: 10px;
 }
 #downBar {
-    -fx-background-color:  #ffffff;
+    -fx-background-color:  #eff1ff;
     -fx-background-radius: 15px;
 }
 #searchBar {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #eff1ff;
     -fx-background-radius: 20px;
     -fx-padding: 10px;
 }
@@ -29,7 +34,7 @@
     -fx-padding: 10px;
     -fx-spacing: 20px;
     -fx-alignment: center-top;
-    -fx-background-color: #ffffff;
+    -fx-background-color: #eff1ff;
 }
 #fileChooserContent {
     -fx-alignment: center;
@@ -37,16 +42,20 @@
     -fx-padding: 10px;
 }
 #dragFileContainer {
-    -fx-border-radius: 18px;
-    -fx-border-width: 2px;
-    -fx-border-color: #c2c2c2;
-    -fx-border-style: dashed;
+    -fx-background-radius: 18px;
+    -fx-background-color: linear-gradient(to right, rgba(82,67,255,1), rgba(109,171,255,1));;
 }
 #fileChooserLabel {
     -fx-alignment: center;
     -fx-font-family: Poppins;
     -fx-font-size: 14px;
-    -fx-text-fill: #4a4a4a;
+    -fx-text-fill: #ffffff;
+}
+#fileChooserBtn {
+    -fx-background-color: #ffffff;
+}
+#fileChooserBtnLabel {
+    -fx-text-fill: #4a48ff;
 }
 .btn_container {
     -fx-background-color: #4a48ff;
@@ -65,22 +74,21 @@
     -fx-font-size: 14px;
     -fx-text-fill: #ffffff;
 }
-
 .itemContainer {
-    -fx-background-color: #edf4ff;
+    -fx-background-color: #ffffff;
     -fx-background-radius: 10px;
     -fx-alignment: center;
     -fx-padding: 10px;
     -fx-spacing: 10px;
 }
-.itemName {
+.itemText {
     -fx-font-family: Poppins;
     -fx-font-size: 12px;
     -fx-text-fill: #4a4a4a;
 }
 .itemIcon {
     -fx-alignment: center;
-    -fx-background-radius: 5px;
+    -fx-background-radius: 10px;
     -fx-background-color: linear-gradient(to right, rgba(131,30,255,1) , rgba(212,52,255,1));
     -fx-padding: 5px;
 }
