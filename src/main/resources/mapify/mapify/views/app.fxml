@@ -43,16 +43,20 @@
       </VBox>
       <HBox fx:id="searchBar" alignment="CENTER_LEFT" layoutX="515.0" layoutY="14.0" prefHeight="54.0" prefWidth="460.0" style="-fx-padding: 10px;" stylesheets="@../assets/css/app.css" AnchorPane.leftAnchor="515.0" AnchorPane.rightAnchor="225.0">
          <children>
-            <ImageView fitHeight="22.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../assets/images/icons/icons8-chercher-90.png" />
-               </image>
-            </ImageView>
-            <TextField fx:id="searchBarLabel" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="415.0" promptText="Rechercher" style="-fx-background-color: transparent;">
+            <TextField fx:id="searchBarLabel" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="415.0" promptText="Search on map" style="-fx-background-color: transparent;">
                <font>
                   <Font name="Poppins Regular" size="14.0" />
                </font>
             </TextField>
+            <Button fx:id="searchBtn" mnemonicParsing="false">
+               <graphic>
+                  <ImageView fitHeight="22.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/images/icons/icons8-chercher-90.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
          <opaqueInsets>
             <Insets />
@@ -103,39 +107,89 @@
                </children>
             </HBox>
          </children></HBox>
-      <HBox fx:id="distanceBarContainer" layoutX="531.0" layoutY="563.0" prefHeight="54.0" prefWidth="430.0" spacing="10.0" style="-fx-padding: 10px;" stylesheets="@../assets/css/app.css">
+      <VBox fx:id="mapInfosContainer" layoutX="530.0" layoutY="439.0" prefHeight="161.0" prefWidth="430.0" spacing="10.0">
          <children>
-            <HBox prefHeight="34.0" prefWidth="86.0" styleClass="distanceBarInfo">
+            <HBox fx:id="MapLayers" prefHeight="164.0" prefWidth="430.0" spacing="10.0" stylesheets="@../assets/css/app.css">
                <children>
-                  <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/images/icons/icons8-marche-52.png" />
-                     </image>
-                  </ImageView>
-                  <Label prefHeight="18.0" prefWidth="45.0" styleClass="distanceBarInfoText" text="45 min" />
+                  <Button mnemonicParsing="false" prefHeight="85.0" prefWidth="82.0" styleClass="downBarBtn">
+                     <graphic>
+                        <VBox prefHeight="183.0" prefWidth="66.0" styleClass="mapLayerConatiner">
+                           <children>
+                              <ImageView fitHeight="67.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/images/icons/maplayer1.png" />
+                                 </image>
+                              </ImageView>
+                              <Label prefHeight="18.0" prefWidth="47.0" styleClass="mapLayerName" text="Default" />
+                           </children>
+                        </VBox>
+                     </graphic>
+                  </Button>
+                  <Button mnemonicParsing="false" prefHeight="85.0" prefWidth="82.0" styleClass="downBarBtn">
+                     <graphic>
+                        <VBox prefHeight="71.0" prefWidth="64.0" styleClass="mapLayerConatiner">
+                           <children>
+                              <ImageView fitHeight="53.0" fitWidth="104.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/images/icons/maplayer2.png" />
+                                 </image>
+                              </ImageView>
+                              <Label prefHeight="18.0" prefWidth="50.0" styleClass="mapLayerName" text="Satellite" />
+                           </children>
+                        </VBox>
+                     </graphic>
+                  </Button>
+                  <Button mnemonicParsing="false" prefHeight="85.0" prefWidth="82.0" styleClass="downBarBtn">
+                     <graphic>
+                        <VBox prefHeight="78.0" prefWidth="201.0" styleClass="mapLayerConatiner">
+                           <children>
+                              <ImageView fitHeight="53.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/images/icons/maplayer3.png" />
+                                 </image>
+                              </ImageView>
+                              <Label prefHeight="18.0" prefWidth="34.0" styleClass="mapLayerName" text="Light" />
+                           </children>
+                        </VBox>
+                     </graphic>
+                  </Button>
                </children>
             </HBox>
-            <HBox prefHeight="34.0" prefWidth="86.0" styleClass="distanceBarInfo">
+            <HBox fx:id="distanceBarContainer" prefHeight="54.0" prefWidth="430.0" spacing="10.0" style="-fx-padding: 10px;" stylesheets="@../assets/css/app.css">
                <children>
-                  <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/images/icons/icons8-voiture-90.png" />
-                     </image>
-                  </ImageView>
-                  <Label prefHeight="18.0" prefWidth="45.0" styleClass="distanceBarInfoText" text="45 min" />
+                  <HBox prefHeight="34.0" prefWidth="86.0" styleClass="distanceBarInfo">
+                     <children>
+                        <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/images/icons/icons8-marche-52.png" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="18.0" prefWidth="45.0" styleClass="distanceBarInfoText" text="45 min" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="34.0" prefWidth="86.0" styleClass="distanceBarInfo">
+                     <children>
+                        <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/images/icons/icons8-voiture-90.png" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="18.0" prefWidth="45.0" styleClass="distanceBarInfoText" text="45 min" />
+                     </children>
+                  </HBox>
+                  <Label prefHeight="32.0" prefWidth="111.0" styleClass="distanceBarText" text="2.2 Km" />
+                  <Button fx:id="distanceCloseBtn" mnemonicParsing="false">
+                     <graphic>
+                        <ImageView fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/images/icons/close.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children>
             </HBox>
-            <Label prefHeight="32.0" prefWidth="111.0" styleClass="distanceBarText" text="2.2 Km" />
-            <Button mnemonicParsing="false">
-               <graphic>
-                  <ImageView fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/images/icons/close.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
          </children>
-      </HBox>
+      </VBox>
    </children>
 </AnchorPane>

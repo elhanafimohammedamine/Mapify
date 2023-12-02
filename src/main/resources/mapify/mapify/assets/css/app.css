@@ -28,6 +28,7 @@
 }
 .slider .thumb {
     -fx-background-color: #636780;
+    -fx-cursor: hand;
 }
 .slider .track {
     -fx-background-color: #d3d7f5;
@@ -44,36 +45,18 @@
 .downBarBtn:hover {
     -fx-background-color: #d3d7f5;
 }
-#distanceBarContainer {
-    -fx-background-color: linear-gradient(to right, rgba(102,139,255,1), rgba(204,170,255,1));
-    -fx-background-radius: 20px;
-    -fx-padding: 10px;
-    -fx-alignment: center;
-    -fx-spacing: 10px;
-}
-.distanceBarText {
-    -fx-font-size: 20px;
-    -fx-font-family: "Poppins Medium";
-    -fx-text-fill: #ffffff;
-}
-.distanceBarInfo {
-    -fx-alignment: center;
-    -fx-spacing: 5px;
-}
-.distanceBarInfoText {
-    -fx-font-family: "Poppins Medium";
-    -fx-text-fill: #ffffff;
-    -fx-font-size: 12px;
-}
 #searchBar {
     -fx-background-color: #eff1ff;
     -fx-background-radius: 20px;
     -fx-padding: 10px;
 }
+#searchBtn {
+    -fx-cursor: hand;
+}
 #searchBarLabel {
     -fx-font-size: 14px;
     -fx-font-family: Poppins;
-    -fx-text-fill: #636780;
+    -fx-text-fill: #4c4a5c;
 }
 .button {
     -fx-background-color: transparent;
@@ -82,7 +65,7 @@
 #fileChooserContainer {
     -fx-padding: 10px;
     -fx-spacing: 20px;
-    -fx-alignment: center-top;
+    -fx-alignment: top-center;
     -fx-background-color: #eff1ff;
 }
 #fileChooserContent {
@@ -102,15 +85,15 @@
 }
 #fileChooserBtn {
     -fx-background-color: #ffffff;
+    -fx-cursor: hand;
 }
 #fileChooserBtn:hover {
     -fx-background-color: #eff1ff;
 }
 #fileChooserBtnLabel {
-    -fx-text-fill: #4a48ff;
+    -fx-text-fill: #4b4cff;
 }
 .btn_container {
-    -fx-background-color: #4a48ff;
     -fx-background-radius: 10px;
     -fx-cursor: hand;
 }
@@ -118,13 +101,27 @@
     -fx-spacing: 5px;
     -fx-alignment: center;
 }
-.btn_container:hover {
-    -fx-background-color: #3a37f2;
+.primaryBtn {
+    -fx-background-color: linear-gradient(to right,  rgba(62,63,255,1), rgba(109,65,255,1));
+}
+.secondaryBtn {
+    -fx-background-color: #ffffff;
+}
+.primaryBtn:hover {
+    -fx-background-color: #5234ff;
+}
+.secondaryBtn:hover {
+    -fx-background-color: #f7f7ff;
 }
 .btn_text {
     -fx-font-family: Poppins;
     -fx-font-size: 14px;
+}
+.primaryBtnText {
     -fx-text-fill: #ffffff;
+}
+.secondaryBtnText {
+    -fx-text-fill:#636780;
 }
 .itemContainer {
     -fx-background-color: #ffffff;
@@ -134,15 +131,44 @@
     -fx-spacing: 10px;
 }
 .itemText {
-    -fx-font-family: Poppins;
+    -fx-font-family: "Poppins Medium";
     -fx-font-size: 12px;
-    -fx-text-fill: #4a4a4a;
+    -fx-text-fill: #4c4a5c;
 }
 .itemIcon {
     -fx-alignment: center;
     -fx-background-radius: 10px;
     -fx-background-color: linear-gradient(to right, rgba(131,30,255,1) , rgba(212,52,255,1));
     -fx-padding: 5px;
+}
+
+#mapInfosContainer {
+    -fx-alignment: center;
+    -fx-spacing: 10px;
+}
+#distanceBarContainer {
+    -fx-background-color: linear-gradient(to right, rgba(102,139,255,1), rgba(204,170,255,1));
+    -fx-background-radius: 20px;
+    -fx-padding: 10px;
+    -fx-alignment: center;
+    -fx-spacing: 10px;
+}
+#distanceCloseBtn {
+    -fx-cursor: hand;
+}
+.distanceBarText {
+    -fx-font-size: 20px;
+    -fx-font-family: "Poppins Medium";
+    -fx-text-fill: #ffffff;
+}
+.distanceBarInfo {
+    -fx-alignment: center;
+    -fx-spacing: 5px;
+}
+.distanceBarInfoText {
+    -fx-font-family: "Poppins Medium";
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
 }
 #MapLayers {
     -fx-alignment: center;
@@ -154,9 +180,92 @@
 .mapLayerConatiner {
     -fx-alignment: center;
     -fx-spacing: 5px;
+    -fx-padding: 5px;
 }
 .mapLayerName {
     -fx-font-family: "Poppins Medium";
     -fx-font-size: 12px;
     -fx-text-fill: #636780;
+}
+#usersListContainer {
+    -fx-padding: 10px;
+    -fx-spacing: 15px;
+    -fx-alignment: top-center;
+    -fx-background-color: #eff1ff;
+}
+#usersSearchContainer {
+    -fx-padding: 5px;
+    -fx-alignment: center;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10px;
+}
+#usersSearchInput {
+    -fx-font-size: 12px;
+    -fx-font-family: Poppins;
+    -fx-text-fill: #636780;
+}
+#usersScrollContainer {
+    -fx-padding: 3px;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10px;
+    -fx-spacing: 5px;
+}
+#usersScrollPane {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+.scroll-bar:horizontal, .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+.scroll-bar:vertical {
+    -fx-pref-width: 12px;
+}
+.scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-min-height: 0;
+    -fx-min-width: 0;
+}
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+#usersScrollPane .scroll-bar .thumb {
+    -fx-background-color: #d3d7f5;
+    -fx-cursor: hand;
+}
+#usersScrollPane .scroll-bar .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+}
+#usersScrollPane > .corner {
+    -fx-background-color: transparent;
+}
+#usersList {
+    -fx-background-color: #ffffff;
+    -fx-padding: 5px 15px 5px 5px;
+}
+.userContainer {
+    -fx-alignment: center;
+    -fx-padding: 8px;
+    -fx-spacing: 5px;
+    -fx-border-width: 0 0 .5 0;
+    -fx-border-color: #d3d7f5;
+}
+.userContainer:hover {
+    -fx-background-color: #f3f3ff;
+}
+.userTitle {
+    -fx-font-family: "Poppins Medium";
+    -fx-font-size: 13px;
+    -fx-text-fill:#4c4a5c;
+}
+.userSubTitle {
+    -fx-font-family: "Poppins Medium";
+    -fx-font-size: 10px;
+    -fx-text-fill: #6a6d83;
+}
+.buttonsContainer {
+    -fx-alignment: center;
+    -fx-spacing: 8px;
 }

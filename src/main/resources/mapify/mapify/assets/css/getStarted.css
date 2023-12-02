@@ -24,7 +24,7 @@
 }
 
 #start_btn_container {
-    -fx-background-color: #4a48ff;
+    -fx-background-color: linear-gradient(to right,  rgba(62,63,255,1), rgba(109,65,255,1));
     -fx-background-radius: 10px;
     -fx-cursor: hand;
 }
@@ -33,7 +33,7 @@
     -fx-alignment: center;
 }
 #start_btn_container:hover {
-    -fx-background-color: #3a37f2;
+    -fx-background-color: #5234ff;
 }
 #start_btn_text {
     -fx-font-family: Poppins;
