@@ -9,8 +9,7 @@
 }
 .mainHeading {
     -fx-font-size: 16px;
-    -fx-font-family: Poppins;
-    -fx-font-weight: 700;
+    -fx-font-family: "Poppins Medium";
     -fx-text-fill: #26224a;
 }
 .mainHeadingLine {
@@ -20,11 +19,61 @@
 #downBar {
     -fx-background-color:  #eff1ff;
     -fx-background-radius: 15px;
+    -fx-spacing: 5px;
+    -fx-padding: 5px;
+}
+#downBarSliderContainer {
+    -fx-alignment: center;
+    -fx-padding: 10px;
+}
+.slider .thumb {
+    -fx-background-color: #636780;
+}
+.slider .track {
+    -fx-background-color: #d3d7f5;
+}
+#sliderLabel {
+    -fx-font-family: "Poppins Medium";
+    -fx-text-fill: #636780;
+}
+.downBarBtn {
+    -fx-cursor: hand;
+    -fx-background-radius: 10px;
+    -fx-alignment: center;
+}
+.downBarBtn:hover {
+    -fx-background-color: #d3d7f5;
+}
+#distanceBarContainer {
+    -fx-background-color: linear-gradient(to right, rgba(102,139,255,1), rgba(204,170,255,1));
+    -fx-background-radius: 20px;
+    -fx-padding: 10px;
+    -fx-alignment: center;
+    -fx-spacing: 10px;
+}
+.distanceBarText {
+    -fx-font-size: 20px;
+    -fx-font-family: "Poppins Medium";
+    -fx-text-fill: #ffffff;
+}
+.distanceBarInfo {
+    -fx-alignment: center;
+    -fx-spacing: 5px;
+}
+.distanceBarInfoText {
+    -fx-font-family: "Poppins Medium";
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
 }
 #searchBar {
     -fx-background-color: #eff1ff;
     -fx-background-radius: 20px;
     -fx-padding: 10px;
+}
+#searchBarLabel {
+    -fx-font-size: 14px;
+    -fx-font-family: Poppins;
+    -fx-text-fill: #636780;
 }
 .button {
     -fx-background-color: transparent;
@@ -43,7 +92,7 @@
 }
 #dragFileContainer {
     -fx-background-radius: 18px;
-    -fx-background-color: linear-gradient(to right, rgba(82,67,255,1), rgba(109,171,255,1));;
+    -fx-background-color: linear-gradient(to right, rgba(102,139,255,1), rgba(204,170,255,1));
 }
 #fileChooserLabel {
     -fx-alignment: center;
@@ -53,6 +102,9 @@
 }
 #fileChooserBtn {
     -fx-background-color: #ffffff;
+}
+#fileChooserBtn:hover {
+    -fx-background-color: #eff1ff;
 }
 #fileChooserBtnLabel {
     -fx-text-fill: #4a48ff;
@@ -91,4 +143,20 @@
     -fx-background-radius: 10px;
     -fx-background-color: linear-gradient(to right, rgba(131,30,255,1) , rgba(212,52,255,1));
     -fx-padding: 5px;
+}
+#MapLayers {
+    -fx-alignment: center;
+    -fx-background-color:  #eff1ff;
+    -fx-background-radius: 15px;
+    -fx-spacing: 5px;
+    -fx-padding: 10px;
+}
+.mapLayerConatiner {
+    -fx-alignment: center;
+    -fx-spacing: 5px;
+}
+.mapLayerName {
+    -fx-font-family: "Poppins Medium";
+    -fx-font-size: 12px;
+    -fx-text-fill: #636780;
 }
