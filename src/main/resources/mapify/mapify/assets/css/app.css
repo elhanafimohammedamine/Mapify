@@ -13,11 +13,11 @@
     -fx-text-fill: #26224a;
 }
 .mainHeadingLine {
-    -fx-fill: #26224a;
+    -fx-fill: linear-gradient(to right,  rgba(46,46,167,1), rgba(70,37,162,1));
     -fx-background-radius: 10px;
 }
 #downBar {
-    -fx-background-color:  #eff1ff;
+    -fx-background-color:  #ffffff;
     -fx-background-radius: 15px;
     -fx-spacing: 5px;
     -fx-padding: 5px;
@@ -43,10 +43,10 @@
     -fx-alignment: center;
 }
 .downBarBtn:hover {
-    -fx-background-color: #d3d7f5;
+    -fx-background-color: #dcdff8;
 }
 #searchBar {
-    -fx-background-color: #eff1ff;
+    -fx-background-color: #ffffff;
     -fx-background-radius: 20px;
     -fx-padding: 10px;
 }
@@ -84,14 +84,14 @@
     -fx-text-fill: #ffffff;
 }
 #fileChooserBtn {
-    -fx-background-color: #ffffff;
+    -fx-background-color: linear-gradient(to right,  rgba(46,46,167,1), rgba(70,37,162,1));
     -fx-cursor: hand;
 }
 #fileChooserBtn:hover {
-    -fx-background-color: #eff1ff;
+    -fx-background-color: #2e2ea7;
 }
 #fileChooserBtnLabel {
-    -fx-text-fill: #4b4cff;
+    -fx-text-fill: #ffffff;
 }
 .btn_container {
     -fx-background-radius: 10px;
@@ -125,21 +125,31 @@
 }
 .itemContainer {
     -fx-background-color: #ffffff;
-    -fx-background-radius: 10px;
+    -fx-background-radius: 15px;
     -fx-alignment: center;
     -fx-padding: 10px;
     -fx-spacing: 10px;
 }
 .itemText {
     -fx-font-family: "Poppins Medium";
-    -fx-font-size: 12px;
+    -fx-font-size: 14px;
     -fx-text-fill: #4c4a5c;
+}
+.itemSubText {
+    -fx-font-family: Poppins;
+    -fx-font-size: 10px;
+    -fx-text-fill: #6a6d83;
 }
 .itemIcon {
     -fx-alignment: center;
     -fx-background-radius: 10px;
-    -fx-background-color: linear-gradient(to right, rgba(131,30,255,1) , rgba(212,52,255,1));
-    -fx-padding: 5px;
+    -fx-background-color: #62cc8c;
+}
+.itemIconV1 {
+    -fx-background-color: linear-gradient(to right, rgba(98,204,140,1), rgba(160,239,149,1));
+}
+.itemIconV2 {
+    -fx-background-color: linear-gradient(to right, rgba(250,135,108,1), rgba(252,197,152,1));
 }
 
 #mapInfosContainer {
@@ -172,7 +182,7 @@
 }
 #MapLayers {
     -fx-alignment: center;
-    -fx-background-color:  #eff1ff;
+    -fx-background-color:  #ffffff;
     -fx-background-radius: 15px;
     -fx-spacing: 5px;
     -fx-padding: 10px;
@@ -248,7 +258,7 @@
 .userContainer {
     -fx-alignment: center;
     -fx-padding: 8px;
-    -fx-spacing: 5px;
+    -fx-spacing: 8px;
     -fx-border-width: 0 0 .5 0;
     -fx-border-color: #d3d7f5;
 }
@@ -261,7 +271,7 @@
     -fx-text-fill:#4c4a5c;
 }
 .userSubTitle {
-    -fx-font-family: "Poppins Medium";
+    -fx-font-family: Poppins;
     -fx-font-size: 10px;
     -fx-text-fill: #6a6d83;
 }

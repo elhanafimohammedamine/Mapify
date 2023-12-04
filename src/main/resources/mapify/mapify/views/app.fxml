@@ -86,7 +86,7 @@
                <graphic>
                   <ImageView fitHeight="23.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../assets/images/icons/dir1.png" />
+                        <Image url="@../assets/images/icons/icons8-direction-9600.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -95,12 +95,12 @@
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../assets/images/icons/layer.png" />
+                        <Image url="@../assets/images/icons/layers00.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <HBox fx:id="downBarSliderContainer" prefHeight="38.0" prefWidth="216.0">
+            <HBox fx:id="downBarSliderContainer" prefHeight="38.0" prefWidth="223.0" spacing="10.0">
                <children>
                   <Slider fx:id="downBarSlider" prefHeight="18.0" prefWidth="150.0" style="fx: #4a48ff;" />
                   <Label fx:id="sliderLabel" prefHeight="22.0" prefWidth="46.0" text="1000 m" />
