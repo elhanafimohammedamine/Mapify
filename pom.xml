@@ -30,6 +30,21 @@
             <artifactId>javafx-web</artifactId>
             <version>20</version>
         </dependency>
+        <dependency>
+            <groupId>org.graalvm.sdk</groupId>
+            <artifactId>graal-sdk</artifactId>
+            <version>23.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.truffle</groupId>
+            <artifactId>truffle-api</artifactId>
+            <version>23.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js</artifactId>
+            <version>23.0.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -65,4 +80,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

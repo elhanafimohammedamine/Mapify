@@ -62,6 +62,86 @@
             <Insets />
          </opaqueInsets>
       </HBox>
+      <HBox fx:id="distanceBarContainer" layoutX="530.0" layoutY="564.0" prefHeight="54.0" prefWidth="430.0" spacing="10.0" style="-fx-padding: 10px;" stylesheets="@../assets/css/app.css">
+         <children>
+            <HBox prefHeight="34.0" prefWidth="86.0" styleClass="distanceBarInfo">
+               <children>
+                  <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/images/icons/icons8-marche-52.png" />
+                     </image>
+                  </ImageView>
+                  <Label prefHeight="18.0" prefWidth="45.0" styleClass="distanceBarInfoText" text="45 min" />
+               </children>
+            </HBox>
+            <HBox prefHeight="34.0" prefWidth="86.0" styleClass="distanceBarInfo">
+               <children>
+                  <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/images/icons/icons8-voiture-90.png" />
+                     </image>
+                  </ImageView>
+                  <Label prefHeight="18.0" prefWidth="45.0" styleClass="distanceBarInfoText" text="45 min" />
+               </children>
+            </HBox>
+            <Label prefHeight="32.0" prefWidth="111.0" styleClass="distanceBarText" text="2.2 Km" />
+            <Button fx:id="distanceCloseBtn" mnemonicParsing="false">
+               <graphic>
+                  <ImageView fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/images/icons/close.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+      <HBox fx:id="MapLayersMenu" layoutX="530.0" layoutY="506.0" prefHeight="100.0" prefWidth="430.0" spacing="10.0" styleClass="visibilityAnimation" stylesheets="@../assets/css/app.css">
+         <children>
+            <Button fx:id="defaultLayer" mnemonicParsing="false" onAction="#changeMapLayer" prefHeight="85.0" prefWidth="82.0" styleClass="downBarBtn">
+               <graphic>
+                  <VBox prefHeight="183.0" prefWidth="66.0" styleClass="mapLayerConatiner">
+                     <children>
+                        <ImageView fitHeight="67.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/images/icons/maplayer1.png" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="18.0" prefWidth="47.0" styleClass="mapLayerName" text="Default" />
+                     </children>
+                  </VBox>
+               </graphic>
+            </Button>
+            <Button fx:id="satelliteLayer" mnemonicParsing="false" onAction="#changeMapLayer" prefHeight="85.0" prefWidth="82.0" styleClass="downBarBtn">
+               <graphic>
+                  <VBox prefHeight="71.0" prefWidth="64.0" styleClass="mapLayerConatiner">
+                     <children>
+                        <ImageView fitHeight="53.0" fitWidth="104.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/images/icons/maplayer2.png" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="18.0" prefWidth="50.0" styleClass="mapLayerName" text="Satellite" />
+                     </children>
+                  </VBox>
+               </graphic>
+            </Button>
+            <Button fx:id="lightLayer" mnemonicParsing="false" onAction="#changeMapLayer" prefHeight="85.0" prefWidth="82.0" styleClass="downBarBtn">
+               <graphic>
+                  <VBox prefHeight="78.0" prefWidth="201.0" styleClass="mapLayerConatiner">
+                     <children>
+                        <ImageView fitHeight="53.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/images/icons/maplayer3.png" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="18.0" prefWidth="34.0" styleClass="mapLayerName" text="Light" />
+                     </children>
+                  </VBox>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
       <HBox fx:id="downBar" layoutX="531.0" layoutY="622.0" prefHeight="44.0" prefWidth="429.0" spacing="10.0" style="-fx-padding: 10px;" stylesheets="@../assets/css/app.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="531.0" AnchorPane.rightAnchor="240.0">
          <children>
             <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="40.0" styleClass="downBarBtn">
@@ -82,7 +162,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="40.0" styleClass="downBarBtn">
+            <Button fx:id="locationBtn" mnemonicParsing="false" prefHeight="38.0" prefWidth="40.0" styleClass="downBarBtn">
                <graphic>
                   <ImageView fitHeight="23.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -91,7 +171,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="40.0" styleClass="downBarBtn">
+            <Button fx:id="LayersChangerBtn" mnemonicParsing="false" onAction="#showMapLayerMenu" prefHeight="38.0" prefWidth="40.0" styleClass="downBarBtn">
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -107,89 +187,5 @@
                </children>
             </HBox>
          </children></HBox>
-      <VBox fx:id="mapInfosContainer" layoutX="530.0" layoutY="439.0" prefHeight="161.0" prefWidth="430.0" spacing="10.0">
-         <children>
-            <HBox fx:id="MapLayers" prefHeight="164.0" prefWidth="430.0" spacing="10.0" stylesheets="@../assets/css/app.css">
-               <children>
-                  <Button mnemonicParsing="false" prefHeight="85.0" prefWidth="82.0" styleClass="downBarBtn">
-                     <graphic>
-                        <VBox prefHeight="183.0" prefWidth="66.0" styleClass="mapLayerConatiner">
-                           <children>
-                              <ImageView fitHeight="67.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/images/icons/maplayer1.png" />
-                                 </image>
-                              </ImageView>
-                              <Label prefHeight="18.0" prefWidth="47.0" styleClass="mapLayerName" text="Default" />
-                           </children>
-                        </VBox>
-                     </graphic>
-                  </Button>
-                  <Button mnemonicParsing="false" prefHeight="85.0" prefWidth="82.0" styleClass="downBarBtn">
-                     <graphic>
-                        <VBox prefHeight="71.0" prefWidth="64.0" styleClass="mapLayerConatiner">
-                           <children>
-                              <ImageView fitHeight="53.0" fitWidth="104.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/images/icons/maplayer2.png" />
-                                 </image>
-                              </ImageView>
-                              <Label prefHeight="18.0" prefWidth="50.0" styleClass="mapLayerName" text="Satellite" />
-                           </children>
-                        </VBox>
-                     </graphic>
-                  </Button>
-                  <Button mnemonicParsing="false" prefHeight="85.0" prefWidth="82.0" styleClass="downBarBtn">
-                     <graphic>
-                        <VBox prefHeight="78.0" prefWidth="201.0" styleClass="mapLayerConatiner">
-                           <children>
-                              <ImageView fitHeight="53.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/images/icons/maplayer3.png" />
-                                 </image>
-                              </ImageView>
-                              <Label prefHeight="18.0" prefWidth="34.0" styleClass="mapLayerName" text="Light" />
-                           </children>
-                        </VBox>
-                     </graphic>
-                  </Button>
-               </children>
-            </HBox>
-            <HBox fx:id="distanceBarContainer" prefHeight="54.0" prefWidth="430.0" spacing="10.0" style="-fx-padding: 10px;" stylesheets="@../assets/css/app.css">
-               <children>
-                  <HBox prefHeight="34.0" prefWidth="86.0" styleClass="distanceBarInfo">
-                     <children>
-                        <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../assets/images/icons/icons8-marche-52.png" />
-                           </image>
-                        </ImageView>
-                        <Label prefHeight="18.0" prefWidth="45.0" styleClass="distanceBarInfoText" text="45 min" />
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="34.0" prefWidth="86.0" styleClass="distanceBarInfo">
-                     <children>
-                        <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../assets/images/icons/icons8-voiture-90.png" />
-                           </image>
-                        </ImageView>
-                        <Label prefHeight="18.0" prefWidth="45.0" styleClass="distanceBarInfoText" text="45 min" />
-                     </children>
-                  </HBox>
-                  <Label prefHeight="32.0" prefWidth="111.0" styleClass="distanceBarText" text="2.2 Km" />
-                  <Button fx:id="distanceCloseBtn" mnemonicParsing="false">
-                     <graphic>
-                        <ImageView fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../assets/images/icons/close.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-               </children>
-            </HBox>
-         </children>
-      </VBox>
    </children>
 </AnchorPane>

@@ -1,13 +1,21 @@
 package mapify.mapify;
 
+import javafx.animation.FadeTransition;
+import javafx.event.ActionEvent;
+import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
+import javafx.util.Duration;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import org.graalvm.polyglot.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -17,16 +25,25 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     @FXML
+    private WebView mapView;
+    private WebEngine engine;
+    @FXML
     public VBox sideBarContent;
 
     @FXML
-    private WebView mapView;
-    private WebEngine engine;
+    private HBox MapLayersMenu;
+    @FXML
+    private HBox distanceBarContainer;
+    @FXML
+    private Button LayersChangerBtn;
+    @FXML
+    private Button locationBtn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         engine = mapView.getEngine();
-        engine.load(Objects.requireNonNull(getClass().getResource("/scripts/mapView1.html")).toExternalForm());
+        engine.load(Objects.requireNonNull(getClass().getResource("/scripts/mapView.html")).toExternalForm());
+        MapLayersMenu.setVisible(false);
         loadSideBarComponent();
     }
     private void loadSideBarComponent() {
@@ -37,6 +54,48 @@ public class Controller implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void showMapLayerMenu(ActionEvent event) {
+        boolean visibility = MapLayersMenu.isVisible();
+        FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), MapLayersMenu);
+        if (visibility) {
+            fadeTransition.setToValue(0);
+        } else {
+            fadeTransition.setToValue(1);
+        }
+        fadeTransition.setOnFinished(ev -> MapLayersMenu.setVisible(!visibility));
+        fadeTransition.play();
+        // hide map layers menu when clicking outside the button
+        Scene scene = MapLayersMenu.getScene();
+        if (scene != null) {
+            ((Scene) scene).setOnMouseClicked(e -> {
+                if (!MapLayersMenu.getBoundsInParent().contains(e.getX(), e.getY())) {
+                    fadeTransition.setToValue(0);
+                    fadeTransition.setOnFinished(ev -> MapLayersMenu.setVisible(false));
+                    fadeTransition.play();
+                    scene.setOnMouseClicked(null);
+                    String buttonStyle = "downBarBtn";
+                    LayersChangerBtn.getStyleClass().clear();
+                    LayersChangerBtn.getStyleClass().add(buttonStyle);
+                }
+            });
+        }
+        // changing button style when it is clicked
+        String buttonStyle = visibility ? "downBarBtn" : "downBarBtnClicked" ;
+        LayersChangerBtn.getStyleClass().clear();
+        LayersChangerBtn.getStyleClass().add(buttonStyle);
+    }
+    private void styleClickedButton(boolean clicked) {
+        String buttonStyle = clicked ? "downBarBtnClicked" : "downBarBtn" ;
+        LayersChangerBtn.getStyleClass().clear();
+        LayersChangerBtn.getStyleClass().add(buttonStyle);
+    }
+    @FXML
+    private void changeMapLayer(ActionEvent event) {
+        Button clickedButton = (Button) event.getSource();
+        String buttonId = clickedButton.getId();
+        engine.executeScript("mapLayerChooser('" + buttonId + "')");
     }
 
 }
