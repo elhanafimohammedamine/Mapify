@@ -1,8 +1,13 @@
 package mapify.mapify;
 
 import javafx.animation.FadeTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import javafx.fxml.FXML;
@@ -13,10 +18,12 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import org.graalvm.polyglot.*;
 
-import java.io.File;
+import org.json.JSONObject;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -27,8 +34,9 @@ public class Controller implements Initializable {
     @FXML
     private WebView mapView;
     private WebEngine engine;
+
     @FXML
-    public VBox sideBarContent;
+    private VBox sideBarContent;
 
     @FXML
     private HBox MapLayersMenu;
@@ -38,6 +46,10 @@ public class Controller implements Initializable {
     private Button LayersChangerBtn;
     @FXML
     private Button locationBtn;
+    @FXML
+    private Button zoomInBtn;
+    @FXML
+    private Button zoomOutBtn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -56,7 +68,7 @@ public class Controller implements Initializable {
         }
     }
 
-    public void showMapLayerMenu(ActionEvent event) {
+    public void showMapLayerMenu() {
         boolean visibility = MapLayersMenu.isVisible();
         FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), MapLayersMenu);
         if (visibility) {
@@ -86,16 +98,22 @@ public class Controller implements Initializable {
         LayersChangerBtn.getStyleClass().clear();
         LayersChangerBtn.getStyleClass().add(buttonStyle);
     }
-    private void styleClickedButton(boolean clicked) {
-        String buttonStyle = clicked ? "downBarBtnClicked" : "downBarBtn" ;
-        LayersChangerBtn.getStyleClass().clear();
-        LayersChangerBtn.getStyleClass().add(buttonStyle);
-    }
     @FXML
     private void changeMapLayer(ActionEvent event) {
         Button clickedButton = (Button) event.getSource();
         String buttonId = clickedButton.getId();
         engine.executeScript("mapLayerChooser('" + buttonId + "')");
+        showMapLayerMenu();
+    }
+
+    public void mapZoom(ActionEvent event) {
+        Button zoomBtn = (Button)event.getSource();
+        String clickedZoomBtn = zoomBtn.getId();
+        engine.executeScript("mapZoom('" + clickedZoomBtn + "')");
+    }
+
+    public void getCurrentLocalisation(ActionEvent event) {
+
     }
 
 }

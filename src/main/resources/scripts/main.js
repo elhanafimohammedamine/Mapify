@@ -19,7 +19,7 @@ const layers =  {
     }
 }
 
-const map = L.map("map").setView([51.505, -0.09], 13);
+const map = L.map("map").setView([33.9735883, -6.9381193], 10);
 
 const initialLayer = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
     maxZoom: 20,
@@ -56,4 +56,24 @@ function mapLayerChooser(layer) {
         default:
             setMapLayer(layers.defaultLayer)
     }
+}
+
+function mapZoom(zoomBtnId) {
+    switch (zoomBtnId) {
+        case "zoomInBtn":
+            map.zoomIn(1,true)
+            break
+        case "zoomOutBtn":
+            map.zoomOut(1,true)
+            break
+        default:
+            map.setZoom(10)
+            break
+    }
+}
+function onLocationFound(e) {
+    L.marker(e.latlng).addTo(map)
+}
+function locateMapUser(lat, lng) {
+    map.setView([lat, lng], 10);
 }
