@@ -3,11 +3,10 @@ package mapify.mapify;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import javafx.fxml.FXML;
@@ -25,19 +24,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 
 public class Controller implements Initializable {
 
+    private Location deviceLocation = new Location(null,null);
+    private int circleRadius = 0;
+    private boolean isRadiusChanged = false;
+    private static WebEngine engine;
     @FXML
     private WebView mapView;
-    private WebEngine engine;
-
     @FXML
     private VBox sideBarContent;
-
     @FXML
     private HBox MapLayersMenu;
     @FXML
@@ -50,6 +51,14 @@ public class Controller implements Initializable {
     private Button zoomInBtn;
     @FXML
     private Button zoomOutBtn;
+    @FXML
+    Slider downBarSlider;
+    @FXML
+    Label sliderLabel;
+
+
+
+    private static final String IP_API_URL = "https://ipinfo.io/json";
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -57,6 +66,7 @@ public class Controller implements Initializable {
         engine.load(Objects.requireNonNull(getClass().getResource("/scripts/mapView.html")).toExternalForm());
         MapLayersMenu.setVisible(false);
         loadSideBarComponent();
+        handleRadiusChange();
     }
     private void loadSideBarComponent() {
         try {
@@ -110,10 +120,76 @@ public class Controller implements Initializable {
         Button zoomBtn = (Button)event.getSource();
         String clickedZoomBtn = zoomBtn.getId();
         engine.executeScript("mapZoom('" + clickedZoomBtn + "')");
+
     }
 
-    public void getCurrentLocalisation(ActionEvent event) {
+    private void handleRadiusChange() {
+        circleRadius = (int) downBarSlider.getValue();
+        sliderLabel.setText(convertToMeterToKM(circleRadius));
+        downBarSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                circleRadius = (int) downBarSlider.getValue();
+                // invoke the function that changes the circle radius in javascript code
+                invokeJSCodeOnRadiusChange();
+                sliderLabel.setText(convertToMeterToKM(circleRadius));
+            }
+        });
+    }
+    private void invokeJSCodeOnRadiusChange() {
+        // check if the circle radius has changed for the first time
+        // to call getCurrentLocation
+        if (circleRadius > 0 && !isRadiusChanged) {
+            isRadiusChanged = true;
+            try {
+                getCurrentLocation();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            engine.executeScript("displayCircle('" + circleRadius + "')");
+        }
+        else {
+            engine.executeScript("circle.setRadius('" + circleRadius + "')");
+        }
+    }
+    private String convertToMeterToKM(int distanceInMeter) {
+        if (distanceInMeter > 999) {
+            DecimalFormat decimalFormat = new DecimalFormat("#.###");
+            return decimalFormat.format((double) distanceInMeter/1000) + " Km";
+        }
+        return Integer.toString(distanceInMeter) + " m";
+    }
+    public void getCurrentLocation() throws IOException {
+        // check if the device is already located or not
+        if (deviceLocation.latitude() == null && deviceLocation.longitude() == null) {
+            deviceLocation = fetchLocationData();
+            engine.executeScript("locateMapUser(" + deviceLocation.latitude() + "," + deviceLocation.longitude() + ")");
+        }
+    }
+    // find the location of the ip address of the device
+    private Location fetchLocationData() throws IOException {
+        URL url = new URL(IP_API_URL);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        StringBuilder response = new StringBuilder();
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            response.append(line);
+        }
+        reader.close();
+        JSONObject json = new JSONObject(response.toString());
+        String loc = json.getString("loc");
+        String[] coordinates = loc.split(",");
+        String latitude = coordinates[0];
+        String longitude = coordinates[1];
+        return new Location(latitude, longitude);
+    }
+
+    // record to hold the device location
+    public record Location(String latitude, String longitude) {
     }
 
 }

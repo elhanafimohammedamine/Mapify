@@ -1,3 +1,10 @@
+
+const map = L.map("map").setView([33.9735883, -6.9381193], 10);
+const initialLayer = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+    maxZoom: 20,
+    subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+}).addTo(map);
+
 const layers =  {
     defaultLayer : {
         url : "https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
@@ -18,29 +25,44 @@ const layers =  {
         subdomains: ['mt0','mt1','mt2','mt3']
     }
 }
+const positionIcon = L.icon({
+    iconUrl: './assets/images/posIcon.png',
+    iconSize: [40, 40],
+    iconAnchor: [22, 22],
+    popupAnchor: [-3, -76],
+});
+const userIcon = L.icon({
+    iconUrl: './assets/images/userIcon.png',
+    iconSize: [40, 40],
+    iconAnchor: [22, 22],
+    popupAnchor: [-3, -76],
+});
+let circle = L.circle([null, null], {
+    color: '#4025d6',
+    fillColor: '#5c3eff',
+    fillOpacity: 0.5,
+    radius: null
+})
+let userLocation = {
+    latitude: null,
+    longitude: null
+}
 
-const map = L.map("map").setView([33.9735883, -6.9381193], 10);
 
-const initialLayer = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-    maxZoom: 20,
-    subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-}).addTo(map);
-
-initiateMapSetup()
-
+// functions definitions
 function initiateMapSetup(){
     map.zoomControl.remove();
 }
 function setMapLayer(mapLayer) {
     if(mapLayer.url !== "") {
         const newLayer = L.tileLayer(mapLayer.url, {subdomains: mapLayer.subdomains, maxZoom: mapLayer.maxZoom});
-        map.eachLayer((layer) => {
-            if (layer !== initialLayer) {
-                map.removeLayer(layer);
-            }
-        });
-        newLayer.addTo(map);
+        if (!map.hasLayer(newLayer)) {
+            map.removeLayer(newLayer);
+            newLayer.addTo(map);
+            return "yes"
+        }
     }
+    return "no"
 }
 function mapLayerChooser(layer) {
     switch (layer) {
@@ -57,7 +79,6 @@ function mapLayerChooser(layer) {
             setMapLayer(layers.defaultLayer)
     }
 }
-
 function mapZoom(zoomBtnId) {
     switch (zoomBtnId) {
         case "zoomInBtn":
@@ -71,9 +92,21 @@ function mapZoom(zoomBtnId) {
             break
     }
 }
-function onLocationFound(e) {
-    L.marker(e.latlng).addTo(map)
-}
 function locateMapUser(lat, lng) {
-    map.setView([lat, lng], 10);
+    if (lat !== null && lng !== null) {
+        userLocation.latitude = lat
+        userLocation.longitude = lng
+        L.marker([lat, lng], {icon: positionIcon}).addTo(map)
+        map.setView([lat, lng], 13);
+    }
 }
+
+function displayCircle(radius) {
+    if (userLocation.longitude !== null && userLocation.latitude !== null) {
+        circle.setLatLng([userLocation.latitude, userLocation.longitude])
+        circle.setRadius(radius)
+        circle.addTo(map)
+    }
+}
+// functions calls
+initiateMapSetup()

@@ -62,7 +62,7 @@
             <Insets />
          </opaqueInsets>
       </HBox>
-      <HBox fx:id="distanceBarContainer" layoutX="530.0" layoutY="564.0" prefHeight="54.0" prefWidth="430.0" spacing="10.0" style="-fx-padding: 10px;" stylesheets="@../assets/css/app.css">
+      <HBox fx:id="distanceBarContainer" layoutX="531.0" layoutY="564.0" prefHeight="54.0" prefWidth="444.0" spacing="10.0" style="-fx-padding: 10px;" stylesheets="@../assets/css/app.css">
          <children>
             <HBox prefHeight="34.0" prefWidth="86.0" styleClass="distanceBarInfo">
                <children>
@@ -96,7 +96,7 @@
             </Button>
          </children>
       </HBox>
-      <HBox fx:id="MapLayersMenu" layoutX="530.0" layoutY="506.0" prefHeight="100.0" prefWidth="430.0" spacing="10.0" styleClass="visibilityAnimation" stylesheets="@../assets/css/app.css">
+      <HBox fx:id="MapLayersMenu" layoutX="531.0" layoutY="506.0" prefHeight="100.0" prefWidth="444.0" spacing="10.0" styleClass="visibilityAnimation" stylesheets="@../assets/css/app.css">
          <children>
             <Button fx:id="defaultLayer" mnemonicParsing="false" onAction="#changeMapLayer" prefHeight="85.0" prefWidth="82.0" styleClass="downBarBtn">
                <graphic>
@@ -142,7 +142,7 @@
             </Button>
          </children>
       </HBox>
-      <HBox fx:id="downBar" layoutX="531.0" layoutY="622.0" prefHeight="44.0" prefWidth="429.0" spacing="10.0" style="-fx-padding: 10px;" stylesheets="@../assets/css/app.css" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="531.0" AnchorPane.rightAnchor="240.0">
+      <HBox fx:id="downBar" layoutX="531.0" layoutY="622.0" prefHeight="59.0" prefWidth="444.0" spacing="10.0" style="-fx-padding: 10px;" stylesheets="@../assets/css/app.css" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="531.0" AnchorPane.rightAnchor="225.0">
          <children>
             <Button fx:id="zoomInBtn" mnemonicParsing="false" onAction="#mapZoom" prefHeight="38.0" prefWidth="40.0" styleClass="downBarBtn">
                <graphic>
@@ -162,7 +162,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="locationBtn" mnemonicParsing="false" onAction="#getCurrentLocalisation" prefHeight="38.0" prefWidth="40.0" styleClass="downBarBtn">
+            <Button fx:id="locationBtn" mnemonicParsing="false" onAction="#getCurrentLocation" prefHeight="38.0" prefWidth="40.0" styleClass="downBarBtn">
                <graphic>
                   <ImageView fitHeight="23.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -180,10 +180,10 @@
                   </ImageView>
                </graphic>
             </Button>
-            <HBox fx:id="downBarSliderContainer" prefHeight="38.0" prefWidth="223.0" spacing="10.0">
+            <HBox fx:id="downBarSliderContainer" prefHeight="38.0" prefWidth="240.0" spacing="10.0">
                <children>
-                  <Slider fx:id="downBarSlider" prefHeight="18.0" prefWidth="150.0" style="fx: #4a48ff;" />
-                  <Label fx:id="sliderLabel" prefHeight="22.0" prefWidth="46.0" text="1000 m" />
+                  <Slider fx:id="downBarSlider" blockIncrement="1.0" max="5000.0" prefHeight="18.0" prefWidth="150.0" style="fx: #4a48ff;" />
+                  <Label fx:id="sliderLabel" prefHeight="18.0" prefWidth="70.0" text="1000 m" />
                </children>
             </HBox>
          </children></HBox>
