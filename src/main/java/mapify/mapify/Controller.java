@@ -3,6 +3,7 @@ package mapify.mapify;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -18,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
+import netscape.javascript.JSObject;
 import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,6 +33,7 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
+    private static final String IP_API_URL = "https://ipinfo.io/json";
     private Location deviceLocation = new Location(null,null);
     private int circleRadius = 0;
     private boolean isRadiusChanged = false;
@@ -56,9 +59,6 @@ public class Controller implements Initializable {
     @FXML
     Label sliderLabel;
 
-
-
-    private static final String IP_API_URL = "https://ipinfo.io/json";
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -149,8 +149,21 @@ public class Controller implements Initializable {
             engine.executeScript("displayCircle('" + circleRadius + "')");
         }
         else {
+            // if the map view is not set to the device location when trying to change the circle radius
+            // we set the map view to the device location then change the radius
+            if (!isDeviceLocationInMapView()) {
+                String script = "map.setView([" + deviceLocation.latitude() + ", " + deviceLocation.longitude() + "], 13)";
+                engine.executeScript(script);
+            }
             engine.executeScript("circle.setRadius('" + circleRadius + "')");
         }
+    }
+    // check if the map view is set to the device location or not
+    private boolean isDeviceLocationInMapView() {
+        JSObject result = (JSObject) engine.executeScript("getMapView()");
+        double latitude = (double) result.getMember("lat");
+        double longitude = (double) result.getMember("lng");
+        return longitude == Double.parseDouble(deviceLocation.longitude()) && latitude == Double.parseDouble(deviceLocation.latitude());
     }
     private String convertToMeterToKM(int distanceInMeter) {
         if (distanceInMeter > 999) {

@@ -30,12 +30,18 @@ const positionIcon = L.icon({
     iconSize: [40, 40],
     iconAnchor: [22, 22],
     popupAnchor: [-3, -76],
+    shadowUrl: './assets/images/posShadow.png',
+    shadowSize: [40, 40],
+    shadowAnchor: [22, 22],
 });
 const userIcon = L.icon({
     iconUrl: './assets/images/userIcon.png',
     iconSize: [40, 40],
     iconAnchor: [22, 22],
     popupAnchor: [-3, -76],
+    shadowUrl: './assets/images/posShadow.png',
+    shadowSize: [40, 40],
+    shadowAnchor: [22, 22],
 });
 let circle = L.circle([null, null], {
     color: '#4025d6',
@@ -47,7 +53,6 @@ let userLocation = {
     latitude: null,
     longitude: null
 }
-
 
 // functions definitions
 function initiateMapSetup(){
@@ -108,5 +113,34 @@ function displayCircle(radius) {
         circle.addTo(map)
     }
 }
+
+function getMapView() {
+    let center = map.getCenter()
+    return {
+        lat : center.lat,
+        lng: center.lng
+    }
+}
+
+function getSearchResults(address) {
+    let autocomplete = new google.maps.places.Autocomplete(address);
+    let geocoder = new google.maps.Geocoder();
+    console.log(autocomplete)
+}
+function performAutocomplete(address) {
+    $(document).ready(function () {
+        let autocomplete;
+        autocomplete = new google.maps.places.AutocompleteService((address), {
+            types: ['geocode'],
+        });
+
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            let near_place = autocomplete.getPlace();
+            console.log(near_place);
+        });
+    });
+}
+
 // functions calls
 initiateMapSetup()
+performAutocomplete('fes')
