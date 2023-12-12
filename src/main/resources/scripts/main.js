@@ -121,26 +121,52 @@ function getMapView() {
         lng: center.lng
     }
 }
-
-function getSearchResults(address) {
-    let autocomplete = new google.maps.places.Autocomplete(address);
-    let geocoder = new google.maps.Geocoder();
-    console.log(autocomplete)
-}
-function performAutocomplete(address) {
-    $(document).ready(function () {
-        let autocomplete;
-        autocomplete = new google.maps.places.AutocompleteService((address), {
-            types: ['geocode'],
-        });
-
-        google.maps.event.addListener(autocomplete, 'place_changed', function () {
-            let near_place = autocomplete.getPlace();
-            console.log(near_place);
-        });
-    });
+async function performAutocomplete(address) {
+    let resultingPlaces = []
+    let promise = new Promise((resolve, reject) => {
+        let geocoder = new google.maps.Geocoder();
+        geocoder.geocode({'address': address}, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK && results && results.length > 0) {
+                let location = results[0].geometry.location;
+                let autocompleteService = new google.maps.places.AutocompleteService();
+                autocompleteService.getPlacePredictions({
+                    input: address,
+                    types: ['geocode'],
+                    location: location,
+                    radius: 1000
+                }, function (predictions, status) {
+                    if (status === google.maps.places.PlacesServiceStatus.OK && predictions) {
+                        let placeService = new google.maps.places.PlacesService(document.createElement('div'));
+                        predictions.forEach(function (prediction) {
+                            placeService.getDetails({placeId: prediction.place_id}, function (place, status) {
+                                if (status === google.maps.places.PlacesServiceStatus.OK && place) {
+                                    let placeObj = {
+                                        placeAddress: place.formatted_address,
+                                        placeLat: place.geometry.location.lat(),
+                                        placeLng: place.geometry.location.lng(),
+                                        placeId: place.place_id
+                                    }
+                                    resultingPlaces.push(placeObj)
+                                }
+                                resolve(resultingPlaces);
+                            });
+                        });
+                    } else {
+                        reject('No predictions found');
+                    }
+                });
+            } else {
+                reject('Geocoder failed');
+            }
+        })
+    })
+    resultingPlaces = await promise;
+    return resultingPlaces
 }
 
 // functions calls
+let obj = performAutocomplete('fes')
+console.log(obj)
 initiateMapSetup()
-performAutocomplete('fes')
+
+

@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import javafx.fxml.FXML;
@@ -58,6 +59,8 @@ public class Controller implements Initializable {
     Slider downBarSlider;
     @FXML
     Label sliderLabel;
+    @FXML
+    TextField searchBarLabel;
 
 
     @Override
@@ -67,6 +70,7 @@ public class Controller implements Initializable {
         MapLayersMenu.setVisible(false);
         loadSideBarComponent();
         handleRadiusChange();
+        performSearchOnMap();
     }
     private void loadSideBarComponent() {
         try {
@@ -178,6 +182,19 @@ public class Controller implements Initializable {
             deviceLocation = fetchLocationData();
             engine.executeScript("locateMapUser(" + deviceLocation.latitude() + "," + deviceLocation.longitude() + ")");
         }
+        MapGeocode geocodeInstance = new MapGeocode();
+        geocodeInstance.autoComplete("fes");
+    }
+
+    private void performSearchOnMap() {
+        MapGeocode geocodeInstance = new MapGeocode();
+        searchBarLabel.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                if (!Objects.equals(newValue, ""))
+                    geocodeInstance.autoComplete(oldValue);
+            }
+        });
     }
     // find the location of the ip address of the device
     private Location fetchLocationData() throws IOException {

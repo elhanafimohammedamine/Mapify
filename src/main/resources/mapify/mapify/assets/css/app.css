@@ -9,7 +9,7 @@
 }
 .mainHeading {
     -fx-font-size: 16px;
-    -fx-font-family: "Poppins Medium";
+    -fx-font-family: "Poppins Medium", sans-serif;
     -fx-text-fill: #26224a;
 }
 .mainHeadingLine {
@@ -34,7 +34,7 @@
     -fx-background-color: #d3d7f5;
 }
 #sliderLabel {
-    -fx-font-family: "Poppins Medium";
+    -fx-font-family: "Poppins Medium", sans-serif;
     -fx-text-fill: #636780;
 }
 .downBarBtn {
@@ -51,6 +51,23 @@
     -fx-background-radius: 10px;
     -fx-alignment: center;
 }
+#searchBox {
+    -fx-padding: 0;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+    -fx-alignment: center;
+    -fx-spacing: 5px;
+}
+.searchResultContainer {
+    -fx-alignment: center;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+}
+.searchResultLabel {
+    -fx-font-family: "Poppins Medium", sans-serif;
+    -fx-font-size: 12px;
+    -fx-text-fill:#4c4a5c;
+}
 #searchBar {
     -fx-background-color: #ffffff;
     -fx-background-radius: 20px;
@@ -61,7 +78,7 @@
 }
 #searchBarLabel {
     -fx-font-size: 14px;
-    -fx-font-family: Poppins;
+    -fx-font-family: Poppins, sans-serif;
     -fx-text-fill: #4c4a5c;
 }
 .button {
@@ -85,7 +102,7 @@
 }
 #fileChooserLabel {
     -fx-alignment: center;
-    -fx-font-family: Poppins;
+    -fx-font-family: Poppins, sans-serif;
     -fx-font-size: 14px;
     -fx-text-fill: #ffffff;
 }
@@ -120,7 +137,7 @@
     -fx-background-color: #f7f7ff;
 }
 .btn_text {
-    -fx-font-family: Poppins;
+    -fx-font-family: Poppins, sans-serif;
     -fx-font-size: 14px;
 }
 .primaryBtnText {
@@ -137,12 +154,12 @@
     -fx-spacing: 10px;
 }
 .itemText {
-    -fx-font-family: "Poppins Medium";
+    -fx-font-family: "Poppins Medium", sans-serif;
     -fx-font-size: 14px;
     -fx-text-fill: #4c4a5c;
 }
 .itemSubText {
-    -fx-font-family: Poppins;
+    -fx-font-family: Poppins, sans-serif;
     -fx-font-size: 10px;
     -fx-text-fill: #6a6d83;
 }
@@ -174,7 +191,7 @@
 }
 .distanceBarText {
     -fx-font-size: 20px;
-    -fx-font-family: "Poppins Medium";
+    -fx-font-family: "Poppins Medium", sans-serif;
     -fx-text-fill: #ffffff;
 }
 .distanceBarInfo {
@@ -182,7 +199,7 @@
     -fx-spacing: 5px;
 }
 .distanceBarInfoText {
-    -fx-font-family: "Poppins Medium";
+    -fx-font-family: "Poppins Medium", sans-serif;
     -fx-text-fill: #ffffff;
     -fx-font-size: 12px;
 }
@@ -199,7 +216,7 @@
     -fx-padding: 5px;
 }
 .mapLayerName {
-    -fx-font-family: "Poppins Medium";
+    -fx-font-family: "Poppins Medium", sans-serif;
     -fx-font-size: 12px;
     -fx-text-fill: #636780;
 }
@@ -217,7 +234,7 @@
 }
 #usersSearchInput {
     -fx-font-size: 12px;
-    -fx-font-family: Poppins;
+    -fx-font-family: Poppins, sans-serif;
     -fx-text-fill: #636780;
 }
 #usersScrollContainer {
@@ -272,12 +289,12 @@
     -fx-background-color: #f3f3ff;
 }
 .userTitle {
-    -fx-font-family: "Poppins Medium";
+    -fx-font-family: "Poppins Medium", sans-serif;
     -fx-font-size: 13px;
     -fx-text-fill:#4c4a5c;
 }
 .userSubTitle {
-    -fx-font-family: Poppins;
+    -fx-font-family: Poppins, sans-serif;
     -fx-font-size: 10px;
     -fx-text-fill: #6a6d83;
 }
