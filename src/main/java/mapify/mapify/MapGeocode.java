@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 public class MapGeocode {
-    private final String googleMapKey = "AIzaSyBCAOYM3zI6M4n0e9LpTerxM0QnU9ZjNfE";
+    private final String googleMapKey = System.getenv("GOOGLE_API_KEY");
     public MapGeocode() {
 
     }

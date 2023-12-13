@@ -183,7 +183,7 @@ public class Controller implements Initializable {
             engine.executeScript("locateMapUser(" + deviceLocation.latitude() + "," + deviceLocation.longitude() + ")");
         }
         MapGeocode geocodeInstance = new MapGeocode();
-        geocodeInstance.autoComplete("fes");
+        //geocodeInstance.autoComplete("fes");
     }
 
     private void performSearchOnMap() {
@@ -191,8 +191,11 @@ public class Controller implements Initializable {
         searchBarLabel.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                /*
                 if (!Objects.equals(newValue, ""))
                     geocodeInstance.autoComplete(oldValue);
+
+                 */
             }
         });
     }
