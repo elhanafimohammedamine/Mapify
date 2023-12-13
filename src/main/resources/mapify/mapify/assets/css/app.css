@@ -51,12 +51,20 @@
     -fx-background-radius: 10px;
     -fx-alignment: center;
 }
-#searchBox {
-    -fx-padding: 0;
+#searchResultBox {
     -fx-background-color: #ffffff;
-    -fx-background-radius: 20px;
-    -fx-alignment: center;
     -fx-spacing: 5px;
+    -fx-padding: 0px 10px 0px 10px;
+}
+#searchResultList {
+    -fx-background-color: #ffffff;
+    -fx-padding: 0px 5px 0px 5px;
+}
+#searchBox {
+    -fx-background-color: #ffffff;
+    -fx-padding: 0px;
+    -fx-spacing: 3px;
+    -fx-background-radius: 15px;
 }
 .searchResultContainer {
     -fx-alignment: center;
@@ -70,7 +78,7 @@
 }
 #searchBar {
     -fx-background-color: #ffffff;
-    -fx-background-radius: 20px;
+    -fx-background-radius: 15px;
     -fx-padding: 10px;
 }
 #searchBtn {
@@ -124,6 +132,18 @@
     -fx-spacing: 5px;
     -fx-alignment: center;
 }
+.result_btn_content {
+    -fx-spacing: 5px;
+    -fx-padding: 5px;
+    -fx-alignment: center;
+    -fx-background-color: #fff;
+    -fx-border-width: 0 0 .5 0;
+    -fx-border-color: #d3d7f5;
+}
+.result_btn_content:hover {
+    -fx-background-color: #f3f3ff;
+}
+
 .primaryBtn {
     -fx-background-color: linear-gradient(to right,  rgba(62,63,255,1), rgba(109,65,255,1));
 }
@@ -237,13 +257,13 @@
     -fx-font-family: Poppins, sans-serif;
     -fx-text-fill: #636780;
 }
-#usersScrollContainer {
+.itemsScrollContainer {
     -fx-padding: 3px;
     -fx-background-color: #ffffff;
-    -fx-background-radius: 10px;
+    -fx-background-radius: 15px;
     -fx-spacing: 5px;
 }
-#usersScrollPane {
+.itemsScrollPane {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
 }
@@ -262,16 +282,16 @@
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
-#usersScrollPane .scroll-bar .thumb {
+.itemsScrollPane .scroll-bar .thumb {
     -fx-background-color: #d3d7f5;
     -fx-cursor: hand;
 }
-#usersScrollPane .scroll-bar .track{
+.itemsScrollPane .scroll-bar .track{
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-background-radius: 0em;
 }
-#usersScrollPane > .corner {
+.itemsScrollPane > .corner {
     -fx-background-color: transparent;
 }
 #usersList {

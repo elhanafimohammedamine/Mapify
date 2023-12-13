@@ -3,7 +3,6 @@ package mapify.mapify;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -21,20 +20,17 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import netscape.javascript.JSObject;
-import org.json.JSONObject;
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 
 public class Controller implements Initializable {
-
-    private static final String IP_API_URL = "https://ipinfo.io/json";
+    private static final MapGeocode geocodeInstance = new MapGeocode();
     private Location deviceLocation = new Location(null,null);
     private int circleRadius = 0;
     private boolean isRadiusChanged = false;
@@ -61,6 +57,12 @@ public class Controller implements Initializable {
     Label sliderLabel;
     @FXML
     TextField searchBarLabel;
+    @FXML
+    VBox searchResultsBox;
+    @FXML
+    VBox searchResultList;
+    @FXML
+    Label searchResultLabel;
 
 
     @Override
@@ -68,9 +70,10 @@ public class Controller implements Initializable {
         engine = mapView.getEngine();
         engine.load(Objects.requireNonNull(getClass().getResource("/scripts/mapView.html")).toExternalForm());
         MapLayersMenu.setVisible(false);
+        searchResultsBox.setVisible(false);
         loadSideBarComponent();
         handleRadiusChange();
-        performSearchOnMap();
+        trackSearchLabel();
     }
     private void loadSideBarComponent() {
         try {
@@ -179,46 +182,46 @@ public class Controller implements Initializable {
     public void getCurrentLocation() throws IOException {
         // check if the device is already located or not
         if (deviceLocation.latitude() == null && deviceLocation.longitude() == null) {
-            deviceLocation = fetchLocationData();
-            engine.executeScript("locateMapUser(" + deviceLocation.latitude() + "," + deviceLocation.longitude() + ")");
+            deviceLocation = geocodeInstance.getDeviceLocation();
+            engine.executeScript("goToLocation(" + deviceLocation.latitude() + "," + deviceLocation.longitude() + ", positionIcon)");
         }
-        MapGeocode geocodeInstance = new MapGeocode();
-        //geocodeInstance.autoComplete("fes");
     }
 
-    private void performSearchOnMap() {
-        MapGeocode geocodeInstance = new MapGeocode();
+    @FXML
+    private void performSearchOnMap() throws IOException {
+        ArrayList<LocationResult> autoCompleteResults = new ArrayList<>();
+        String searchAddress = searchBarLabel.getText();
+        if (!Objects.equals(searchAddress, " ")) {
+            autoCompleteResults = geocodeInstance.autoComplete(searchAddress);
+        }
+        if (autoCompleteResults.size() > 0) {
+            searchResultsBox.setVisible(true);
+            for (LocationResult result : autoCompleteResults) {
+                loadResultButton(result);
+            }
+        }
+    }
+    private void loadResultButton(LocationResult result) throws IOException {
+        Button resultButton = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/searchResultItem.fxml")));
+        if (resultButton != null) {
+            resultButton.setOnAction(event -> setMapViewToResultLocation(result.getPlaceLat(), result.getPlaceLng(), result.getPlaceName()));
+            searchResultList.getChildren().add(resultButton);
+        }
+    }
+    private void setMapViewToResultLocation(double lat, double lng, String placeName) {
+        engine.executeScript("goToLocation(" + lat + "," + lng + ", normalPositionIcon)");
+        searchBarLabel.setText(placeName);
+        searchResultsBox.setVisible(false);
+    }
+
+    // track the value of search label to hide the previous results
+    private void trackSearchLabel() {
         searchBarLabel.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                /*
-                if (!Objects.equals(newValue, ""))
-                    geocodeInstance.autoComplete(oldValue);
-
-                 */
+                searchResultsBox.setVisible(false);
             }
         });
-    }
-    // find the location of the ip address of the device
-    private Location fetchLocationData() throws IOException {
-        URL url = new URL(IP_API_URL);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuilder response = new StringBuilder();
-        String line;
-
-        while ((line = reader.readLine()) != null) {
-            response.append(line);
-        }
-        reader.close();
-        JSONObject json = new JSONObject(response.toString());
-        String loc = json.getString("loc");
-        String[] coordinates = loc.split(",");
-        String latitude = coordinates[0];
-        String longitude = coordinates[1];
-        return new Location(latitude, longitude);
     }
 
     // record to hold the device location

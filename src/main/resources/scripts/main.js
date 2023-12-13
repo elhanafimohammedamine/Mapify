@@ -26,11 +26,20 @@ const layers =  {
     }
 }
 const positionIcon = L.icon({
-    iconUrl: './assets/images/posIcon.png',
+    iconUrl: './assets/images/positionIcon.png',
     iconSize: [40, 40],
     iconAnchor: [22, 22],
     popupAnchor: [-3, -76],
-    shadowUrl: './assets/images/posShadow.png',
+    shadowUrl: './assets/images/IconShadow.png',
+    shadowSize: [40, 40],
+    shadowAnchor: [22, 22],
+});
+const normalPositionIcon = L.icon({
+    iconUrl: './assets/images/normalPosition.png',
+    iconSize: [40, 40],
+    iconAnchor: [22, 22],
+    popupAnchor: [-3, -76],
+    shadowUrl: './assets/images/IconShadow.png',
     shadowSize: [40, 40],
     shadowAnchor: [22, 22],
 });
@@ -39,14 +48,14 @@ const userIcon = L.icon({
     iconSize: [40, 40],
     iconAnchor: [22, 22],
     popupAnchor: [-3, -76],
-    shadowUrl: './assets/images/posShadow.png',
+    shadowUrl: './assets/images/IconShadow.png',
     shadowSize: [40, 40],
     shadowAnchor: [22, 22],
 });
 let circle = L.circle([null, null], {
     color: '#4025d6',
     fillColor: '#5c3eff',
-    fillOpacity: 0.5,
+    fillOpacity: 0.4,
     radius: null
 })
 let userLocation = {
@@ -97,11 +106,11 @@ function mapZoom(zoomBtnId) {
             break
     }
 }
-function locateMapUser(lat, lng) {
+function goToLocation(lat, lng, icon) {
     if (lat !== null && lng !== null) {
         userLocation.latitude = lat
         userLocation.longitude = lng
-        L.marker([lat, lng], {icon: positionIcon}).addTo(map)
+        L.marker([lat, lng], {icon: icon}).addTo(map)
         map.setView([lat, lng], 13);
     }
 }
@@ -121,6 +130,10 @@ function getMapView() {
         lng: center.lng
     }
 }
+// functions calls
+initiateMapSetup()
+
+/*
 async function performAutocomplete(address) {
     let resultingPlaces = []
     let promise = new Promise((resolve, reject) => {
@@ -164,9 +177,6 @@ async function performAutocomplete(address) {
     return resultingPlaces
 }
 
-// functions calls
-let obj = performAutocomplete('fes')
-console.log(obj)
-initiateMapSetup()
+ */
 
 

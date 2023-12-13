@@ -8,11 +8,13 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MapGeocode {
-    private final String googleMapKey = System.getenv("GOOGLE_API_KEY");
+    private final String googleMapKey = "AIzaSyBCAOYM3zI6M4n0e9LpTerxM0QnU9ZjNfE";
+    private static final String IP_API_URL = "https://ipinfo.io/json";
+    private ArrayList<LocationResult> predictedLocations = new ArrayList<>();
     public MapGeocode() {
 
     }
@@ -33,7 +35,7 @@ public class MapGeocode {
         }
         return null;
     }
-    public Controller.Location getLocation(String address) {
+    private Controller.Location getLocation(String address) {
         String getLocationLink = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=" + googleMapKey;
         String formattedLink = getLocationLink.replaceAll(" ", "%2C");
         JSONObject response = performFetchRequest(formattedLink);
@@ -52,7 +54,7 @@ public class MapGeocode {
         return null;
     }
     private LocationResult getLocationDetails(String placeId) {
-        String locationDetailLink = "https://maps.googleapis.com/maps/api/place/autocomplete/json&place_id=" + placeId + "&key=" + googleMapKey;
+        String locationDetailLink = "https://maps.googleapis.com/maps/api/place/details/json?place_id=" + placeId + "&key=" + googleMapKey;
         JSONObject response = performFetchRequest(locationDetailLink);
         if (response != null) {
             JSONObject result = response.getJSONObject("result");
@@ -66,7 +68,7 @@ public class MapGeocode {
         }
         return null;
     }
-    public void autoComplete(String address) {
+    public ArrayList<LocationResult> autoComplete(String address) {
         Controller.Location addressLocation = getLocation(address);
         if (addressLocation != null) {
             String autoCompleteLink = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input="+ address + "&location=" + addressLocation.latitude() + "%2C" + addressLocation.longitude() + "&radius=1000" + "&types=geocode&key=" + googleMapKey;
@@ -78,11 +80,21 @@ public class MapGeocode {
                     JSONObject prediction = predictions.getJSONObject(i);
                     String placeId = prediction.getString("place_id");
                     LocationResult result = getLocationDetails(placeId);
-                    if (result != null) {
-                        System.out.println(result.toString());
-                    }
+                    predictedLocations.add(result);
                 }
             }
         }
+        return predictedLocations;
+    }
+    public Controller.Location getDeviceLocation() throws IOException {
+        JSONObject response = performFetchRequest(IP_API_URL);
+        if (response != null) {
+            String loc = response.getString("loc");
+            String[] coordinates = loc.split(",");
+            String latitude = coordinates[0];
+            String longitude = coordinates[1];
+            return new Controller.Location(latitude, longitude);
+        }
+        return null;
     }
 }

@@ -22,7 +22,7 @@
                   <Label prefHeight="63.0" prefWidth="250.0" styleClass="mainHeading" text="Users" />
                </children>
             </VBox>
-            <VBox fx:id="usersScrollContainer" prefHeight="398.0" prefWidth="250.0">
+            <VBox fx:id="usersScrollContainer" prefHeight="398.0" prefWidth="250.0" styleClass="itemsScrollContainer">
                <children>
                   <HBox fx:id="usersSearchContainer" alignment="CENTER_LEFT" prefHeight="36.0" prefWidth="242.0" stylesheets="@../assets/css/app.css">
                      <children>
@@ -45,7 +45,7 @@
                         <Insets />
                      </opaqueInsets>
                   </HBox>
-                  <ScrollPane fx:id="usersScrollPane" prefHeight="434.0" prefWidth="244.0" style="-fx-background-insets: 0;">
+                  <ScrollPane fx:id="usersScrollPane" prefHeight="434.0" prefWidth="244.0" style="-fx-background-insets: 0;" styleClass="itemsScrollPane">
                      <content>
                         <VBox fx:id="usersList" prefHeight="406.0" prefWidth="248.0">
                            <children>
