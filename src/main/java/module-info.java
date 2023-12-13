@@ -12,4 +12,10 @@ module mapify.mapify {
 
     opens mapify.mapify to javafx.fxml;
     exports mapify.mapify;
+    exports mapify.mapify.Controllers;
+    opens mapify.mapify.Controllers to javafx.fxml;
+    exports mapify.mapify.Models;
+    opens mapify.mapify.Models to javafx.fxml;
+    exports mapify.mapify.APIs;
+    opens mapify.mapify.APIs to javafx.fxml;
 }

@@ -1,4 +1,6 @@
-package mapify.mapify;
+package mapify.mapify.APIs;
+import mapify.mapify.Controllers.Controller;
+import mapify.mapify.Models.LocationResult;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -10,9 +12,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MapGeocode {
-    private final String googleMapKey = "AIzaSyBCAOYM3zI6M4n0e9LpTerxM0QnU9ZjNfE";
+    private final String googleMapKey = System.getenv("GOOGLE_API_KEY");
     private static final String IP_API_URL = "https://ipinfo.io/json";
     private ArrayList<LocationResult> predictedLocations = new ArrayList<>();
     public MapGeocode() {
@@ -56,7 +59,7 @@ public class MapGeocode {
     private LocationResult getLocationDetails(String placeId) {
         String locationDetailLink = "https://maps.googleapis.com/maps/api/place/details/json?place_id=" + placeId + "&key=" + googleMapKey;
         JSONObject response = performFetchRequest(locationDetailLink);
-        if (response != null) {
+        if (response != null && checkResponseStatus(response)) {
             JSONObject result = response.getJSONObject("result");
             String formattedAddress = result.getString("formatted_address");
             JSONObject geometry = result.getJSONObject("geometry");
@@ -69,12 +72,13 @@ public class MapGeocode {
         return null;
     }
     public ArrayList<LocationResult> autoComplete(String address) {
+        predictedLocations.clear();
         Controller.Location addressLocation = getLocation(address);
         if (addressLocation != null) {
             String autoCompleteLink = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input="+ address + "&location=" + addressLocation.latitude() + "%2C" + addressLocation.longitude() + "&radius=1000" + "&types=geocode&key=" + googleMapKey;
             String formattedLink = autoCompleteLink.replaceAll(" ", "%2C");
             JSONObject response = performFetchRequest(formattedLink);
-            if (response != null) {
+            if (response != null && checkResponseStatus(response)) {
                 JSONArray predictions = response.getJSONArray("predictions");
                 for (int i = 0; i < predictions.length(); i++) {
                     JSONObject prediction = predictions.getJSONObject(i);
@@ -96,5 +100,9 @@ public class MapGeocode {
             return new Controller.Location(latitude, longitude);
         }
         return null;
+    }
+    private boolean checkResponseStatus(JSONObject response) {
+        String status = response.getString("status");
+        return Objects.equals(status,"OK");
     }
 }

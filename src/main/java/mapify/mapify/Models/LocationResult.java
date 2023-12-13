@@ -1,4 +1,4 @@
-package mapify.mapify;
+package mapify.mapify.Models;
 
 public class LocationResult {
     private String placeName;

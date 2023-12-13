@@ -6,11 +6,11 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 
-<Button mnemonicParsing="false" prefHeight="54.0" prefWidth="436.0" styleClass="result_btn_content" stylesheets="@../assets/css/app.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<Button mnemonicParsing="false" prefHeight="54.0" prefWidth="436.0" styleClass="searchResultBtn" stylesheets="@../assets/css/app.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapify.mapify.Controllers.SearchItemController">
    <graphic>
       <HBox prefHeight="46.0" prefWidth="453.0" styleClass="searchResultContainer" stylesheets="@../assets/css/app.css">
          <children>
-            <ImageView fitHeight="23.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="resultIcon" fitHeight="23.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/images/icons/icons8-marqueur-96.png" />
                </image>

@@ -1,4 +1,4 @@
-package mapify.mapify;
+package mapify.mapify.Controllers;
 
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
@@ -19,6 +19,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
+import mapify.mapify.Models.LocationResult;
+import mapify.mapify.APIs.MapGeocode;
 import netscape.javascript.JSObject;
 
 import java.io.IOException;
@@ -183,7 +185,7 @@ public class Controller implements Initializable {
         // check if the device is already located or not
         if (deviceLocation.latitude() == null && deviceLocation.longitude() == null) {
             deviceLocation = geocodeInstance.getDeviceLocation();
-            engine.executeScript("goToLocation(" + deviceLocation.latitude() + "," + deviceLocation.longitude() + ", positionIcon)");
+            engine.executeScript("goToLocation(" + deviceLocation.latitude() + "," + deviceLocation.longitude() + ", userPositionIcon)");
         }
     }
 
@@ -197,15 +199,23 @@ public class Controller implements Initializable {
         if (autoCompleteResults.size() > 0) {
             searchResultsBox.setVisible(true);
             for (LocationResult result : autoCompleteResults) {
-                loadResultButton(result);
+                loadSearchResult(result);
             }
         }
+        else {
+            searchBarLabel.setText("No places Found");
+        }
     }
-    private void loadResultButton(LocationResult result) throws IOException {
-        Button resultButton = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/searchResultItem.fxml")));
+    private void loadSearchResult(LocationResult result) throws IOException {
+        // loading the search result item component
+        FXMLLoader resultLoader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/searchResultItem.fxml")));
+        Button resultButton = resultLoader.load();
         if (resultButton != null) {
+            // get the search result controller and set the data to the component
+            SearchItemController searchResultItemController = resultLoader.getController();
+            searchResultItemController.setData(result.getPlaceName());
             resultButton.setOnAction(event -> setMapViewToResultLocation(result.getPlaceLat(), result.getPlaceLng(), result.getPlaceName()));
-            searchResultList.getChildren().add(resultButton);
+            searchResultsBox.getChildren().add(resultButton);
         }
     }
     private void setMapViewToResultLocation(double lat, double lng, String placeName) {
@@ -219,6 +229,7 @@ public class Controller implements Initializable {
         searchBarLabel.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                searchResultsBox.getChildren().clear();
                 searchResultsBox.setVisible(false);
             }
         });

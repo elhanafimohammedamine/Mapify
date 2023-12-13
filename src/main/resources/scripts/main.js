@@ -25,7 +25,7 @@ const layers =  {
         subdomains: ['mt0','mt1','mt2','mt3']
     }
 }
-const positionIcon = L.icon({
+const userPositionIcon = L.icon({
     iconUrl: './assets/images/positionIcon.png',
     iconSize: [40, 40],
     iconAnchor: [22, 22],
@@ -106,11 +106,21 @@ function mapZoom(zoomBtnId) {
             break
     }
 }
+let userMarker = null
+let locationMarker = null
 function goToLocation(lat, lng, icon) {
     if (lat !== null && lng !== null) {
         userLocation.latitude = lat
         userLocation.longitude = lng
-        L.marker([lat, lng], {icon: icon}).addTo(map)
+        if (locationMarker) {
+            map.removeLayer(locationMarker)
+        }
+        if (icon === userPositionIcon ){
+            userMarker = L.marker([lat, lng], {icon: icon}).addTo(map)
+        }
+        else {
+            locationMarker = L.marker([lat, lng], {icon: icon}).addTo(map)
+        }
         map.setView([lat, lng], 13);
     }
 }
