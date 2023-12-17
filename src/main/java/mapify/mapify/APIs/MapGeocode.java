@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class MapGeocode {
-    private final String googleMapKey = System.getenv("GOOGLE_API_KEY");
+    private final String googleMapKey = "AIzaSyBCAOYM3zI6M4n0e9LpTerxM0QnU9ZjNfE";
     private static final String IP_API_URL = "https://ipinfo.io/json";
     private ArrayList<LocationResult> predictedLocations = new ArrayList<>();
     public MapGeocode() {

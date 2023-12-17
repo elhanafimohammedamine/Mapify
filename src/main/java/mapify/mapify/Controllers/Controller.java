@@ -23,6 +23,7 @@ import mapify.mapify.Models.LocationResult;
 import mapify.mapify.APIs.MapGeocode;
 import netscape.javascript.JSObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -65,6 +66,7 @@ public class Controller implements Initializable {
     VBox searchResultList;
     @FXML
     Label searchResultLabel;
+    private FileChooserController fileChooserController = null;
 
 
     @Override
@@ -81,12 +83,12 @@ public class Controller implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/fileChooser.fxml")));
             Node node = loader.load();
+            fileChooserController = loader.getController();
             sideBarContent.getChildren().add(node);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
     public void showMapLayerMenu() {
         boolean visibility = MapLayersMenu.isVisible();
         FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), MapLayersMenu);
@@ -129,7 +131,6 @@ public class Controller implements Initializable {
         Button zoomBtn = (Button)event.getSource();
         String clickedZoomBtn = zoomBtn.getId();
         engine.executeScript("mapZoom('" + clickedZoomBtn + "')");
-
     }
 
     private void handleRadiusChange() {

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="589.0" prefWidth="271.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="589.0" prefWidth="271.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapify.mapify.Controllers.FileChooserController">
    <children>
       <VBox fx:id="fileChooserContainer" prefHeight="589.0" prefWidth="271.0" stylesheets="@../assets/css/app.css">
          <children>
@@ -27,8 +27,8 @@
                               <Image url="@../assets/images/icons/icons8-télécharger-vers-le-cloud-100.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="fileChooserLabel" prefHeight="30.0" prefWidth="230.0" text="Drag file to upload or" />
-                        <Button fx:id="fileChooserBtn" mnemonicParsing="false" prefHeight="42.0" prefWidth="149.0" styleClass="btn_container">
+                        <Label fx:id="fileChooserLabel" prefHeight="30.0" prefWidth="230.0" text="browse file to upload" />
+                        <Button fx:id="fileChooserBtn" mnemonicParsing="false" onAction="#chooseFileAction" prefHeight="42.0" prefWidth="149.0" styleClass="btn_container">
                            <graphic>
                               <HBox prefHeight="100.0" prefWidth="200.0" styleClass="btn_content">
                                  <children>
@@ -41,7 +41,7 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox prefHeight="58.0" prefWidth="250.0" styleClass="itemContainer">
+            <HBox fx:id="fileContainer" prefHeight="58.0" prefWidth="250.0" styleClass="itemContainer">
                <children>
                   <HBox alignment="CENTER" prefHeight="38.0" prefWidth="48.0" style="-fx-background-radius: 10px;">
                      <children>
@@ -58,8 +58,8 @@
                   </HBox>
                   <VBox prefHeight="38.0" prefWidth="142.0">
                      <children>
-                        <Label prefHeight="32.0" prefWidth="144.0" styleClass="itemText" text="file.csv" />
-                        <Label prefHeight="32.0" prefWidth="144.0" styleClass="itemSubText" text="04/12/2023 01:12" />
+                        <Label fx:id="fileNameLabel" prefHeight="32.0" prefWidth="144.0" styleClass="itemText" text="file.csv" />
+                        <Label fx:id="fileUploadDateLabel" prefHeight="32.0" prefWidth="144.0" styleClass="itemSubText" text="04/12/2023 01:12" />
                      </children>
                   </VBox>
                   <Button fx:id="locateBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="38.0" prefWidth="43.0">

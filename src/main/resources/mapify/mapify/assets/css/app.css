@@ -51,7 +51,7 @@
     -fx-background-radius: 10px;
     -fx-alignment: center;
 }
-#searchResultBox {
+#searchResultsBox {
     -fx-background-color: #ffffff;
     -fx-spacing: 0;
     -fx-padding: 10px;
