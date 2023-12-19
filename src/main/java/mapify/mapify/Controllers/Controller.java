@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
+import mapify.mapify.Database.MongoDBController;
 import mapify.mapify.Models.LocationResult;
 import mapify.mapify.APIs.MapGeocode;
 import mapify.mapify.Models.User;
@@ -89,11 +90,15 @@ public class Controller implements Initializable {
         }
     }
 
-    private void printCVHeaders() {
+    private void printCVHeaders() throws Exception {
         CsvParserController csvController = new CsvParserController();
+        System.out.println(csvController.checkForFileHeadersAndFormat(fileChooserController.getMainFile()));
         if (csvController.checkForFileHeadersAndFormat(fileChooserController.getMainFile())) {
             List<User> userList = csvController.getCSVData(fileChooserController.getMainFile());
-            System.out.println(userList.toString());
+            System.out.println(userList);
+            MongoDBController mongoConnection = new MongoDBController();
+            mongoConnection.InsertUsers(userList, 123);
+            mongoConnection.closeConnection();
         }
     }
     public void showMapLayerMenu() {
@@ -134,7 +139,7 @@ public class Controller implements Initializable {
         showMapLayerMenu();
     }
 
-    public void mapZoom(ActionEvent event) {
+    public void mapZoom(ActionEvent event) throws Exception {
         Button zoomBtn = (Button)event.getSource();
         String clickedZoomBtn = zoomBtn.getId();
         engine.executeScript("mapZoom('" + clickedZoomBtn + "')");

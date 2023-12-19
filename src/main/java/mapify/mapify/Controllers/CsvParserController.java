@@ -21,6 +21,7 @@ public class CsvParserController {
                 String[] values = line.split(",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)");
                 if (!headersProcessed) {
                     headers = values;
+
                     if (!csvHeaderProcessing(line)) {
                         return false;
                     }

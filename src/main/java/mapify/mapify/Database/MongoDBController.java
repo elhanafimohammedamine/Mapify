@@ -13,9 +13,9 @@ import java.util.List;
 
 public class MongoDBController {
 
-    private String connectionString = "ckv,ckv,";
-    private String databaseName = null;
-    private String collectionName = null;
+    private String connectionString = System.getenv("MONGODB_URI");
+    private String databaseName = System.getenv("DATABASE_NAME");
+    private String collectionName = System.getenv("COLLECTION_NAME");
     private MongoClient mongoClient;
     private MongoDatabase database;
     private MongoCollection<Document> collection;
@@ -26,7 +26,7 @@ public class MongoDBController {
         this.collection  = database.getCollection(collectionName);
     }
 
-    public InsertManyResult InsertUsers(List<User> users, String fileId) {
+    public void InsertUsers(List<User> users, double fileId) {
         List<Document> usersDocuments = new ArrayList<>();
         for (User user : users) {
             Document userLocation = new Document()
@@ -41,7 +41,7 @@ public class MongoDBController {
                     .append("file_id", fileId);
             usersDocuments.add(doc);
         }
-        return collection.insertMany(usersDocuments);
+        collection.insertMany(usersDocuments);
     }
     public FindIterable<Document> getAllUsers(double fileId) {
         return collection.find(Filters.eq("file_id", fileId));
