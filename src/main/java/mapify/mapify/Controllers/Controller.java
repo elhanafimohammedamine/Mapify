@@ -21,15 +21,14 @@ import javafx.scene.web.WebView;
 
 import mapify.mapify.Models.LocationResult;
 import mapify.mapify.APIs.MapGeocode;
+import mapify.mapify.Models.User;
 import netscape.javascript.JSObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class Controller implements Initializable {
@@ -89,6 +88,14 @@ public class Controller implements Initializable {
             e.printStackTrace();
         }
     }
+
+    private void printCVHeaders() {
+        CsvParserController csvController = new CsvParserController();
+        if (csvController.checkForFileHeadersAndFormat(fileChooserController.getMainFile())) {
+            List<User> userList = csvController.getCSVData(fileChooserController.getMainFile());
+            System.out.println(userList.toString());
+        }
+    }
     public void showMapLayerMenu() {
         boolean visibility = MapLayersMenu.isVisible();
         FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), MapLayersMenu);
@@ -131,6 +138,7 @@ public class Controller implements Initializable {
         Button zoomBtn = (Button)event.getSource();
         String clickedZoomBtn = zoomBtn.getId();
         engine.executeScript("mapZoom('" + clickedZoomBtn + "')");
+        printCVHeaders();
     }
 
     private void handleRadiusChange() {

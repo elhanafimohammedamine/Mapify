@@ -8,6 +8,9 @@ module mapify.mapify {
     requires org.apache.httpcomponents.httpclient;
     requires org.apache.httpcomponents.httpcore;
     requires json.simple;
+    requires org.mongodb.driver.sync.client;
+    requires org.mongodb.bson;
+    requires org.mongodb.driver.core;
 
 
     opens mapify.mapify to javafx.fxml;

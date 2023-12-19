@@ -5,6 +5,17 @@ import mapify.mapify.Controllers.Controller;
 public class User {
     private String firstName;
     private String lastName;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
+
     private String address;
     private String phoneNumber;
     private Controller.Location addressLocation;
@@ -14,7 +25,7 @@ public class User {
 
     User() {
     }
-    User(String firstName, String lastName, String address) {
+    public User(String firstName, String lastName, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
