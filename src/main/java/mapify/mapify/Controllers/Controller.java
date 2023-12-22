@@ -33,6 +33,7 @@ import java.util.*;
 
 
 public class Controller implements Initializable {
+    private List<User> userList = new ArrayList<>();
     private static final MapGeocode geocodeInstance = new MapGeocode();
     private Location deviceLocation = new Location(null,null);
     private int circleRadius = 0;
@@ -85,21 +86,30 @@ public class Controller implements Initializable {
             Node node = loader.load();
             fileChooserController = loader.getController();
             sideBarContent.getChildren().add(node);
+            fileChooserController.hideFileComponent();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void printCVHeaders() throws Exception {
+    private void checkForCsvFileFormat() throws Exception {
         CsvParserController csvController = new CsvParserController();
-        System.out.println(csvController.checkForFileHeadersAndFormat(fileChooserController.getMainFile()));
         if (csvController.checkForFileHeadersAndFormat(fileChooserController.getMainFile())) {
-            List<User> userList = csvController.getCSVData(fileChooserController.getMainFile());
-            System.out.println(userList);
-            MongoDBController mongoConnection = new MongoDBController();
-            mongoConnection.InsertUsers(userList, 123);
-            mongoConnection.closeConnection();
+            userList = csvController.getCSVData(fileChooserController.getMainFile());
+            if (userList.size() != 0) {
+                for (User user : userList){
+                    getUserLocation(user);
+                }
+                System.out.println(userList.toString());
+            }
         }
+        else {
+            fileChooserController.loadFileErrorComponent();
+        }
+    }
+    private void getUserLocation(User user) {
+        Location userLocation = geocodeInstance.getLocation(user.getAddress());
+        user.setAddressLocation(userLocation);
     }
     public void showMapLayerMenu() {
         boolean visibility = MapLayersMenu.isVisible();
@@ -143,7 +153,6 @@ public class Controller implements Initializable {
         Button zoomBtn = (Button)event.getSource();
         String clickedZoomBtn = zoomBtn.getId();
         engine.executeScript("mapZoom('" + clickedZoomBtn + "')");
-        printCVHeaders();
     }
 
     private void handleRadiusChange() {

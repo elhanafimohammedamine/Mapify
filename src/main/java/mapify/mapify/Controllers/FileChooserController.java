@@ -3,33 +3,38 @@ package mapify.mapify.Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class FileChooserController implements Initializable {
 
-    @FXML
-    private Button fileChooserBtn;
     @FXML
     private Label fileNameLabel;
     @FXML
     private Label fileUploadDateLabel;
     @FXML
     private HBox fileContainer;
+    @FXML
+    private VBox fileChooserContainer;
     private File mainFile = null;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        fileContainer.setVisible(false);
+
     }
     public void chooseFileAction(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -49,7 +54,16 @@ public class FileChooserController implements Initializable {
             System.out.println("error !");
         }
     }
+    public void hideFileComponent() {
+        fileContainer.setVisible(false);
+    }
+    public void loadFileErrorComponent() throws IOException {
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/csvFileError.fxml")));
+        VBox errorComponent = loader.load();
+        fileChooserContainer.getChildren().add(errorComponent);
+    }
     public File getMainFile() {
         return mainFile;
     }
+
 }

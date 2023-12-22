@@ -104,7 +104,7 @@
 
 #fileChooserContainer {
     -fx-padding: 10px;
-    -fx-spacing: 20px;
+    -fx-spacing: 10px;
     -fx-alignment: top-center;
     -fx-background-color: #eff1ff;
 }
@@ -132,6 +132,29 @@
 }
 #fileChooserBtnLabel {
     -fx-text-fill: #ffffff;
+}
+#fileSuperContainer {
+    -fx-spacing: 10px;
+}
+#csvErrorContainer {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 15px;
+    -fx-alignment: center;
+    -fx-padding: 10px;
+    -fx-spacing: 5px;
+}
+#csvErrorHeader {
+    -fx-alignment: center-left;
+    -fx-padding: 0;
+    -fx-spacing: 10px;
+}
+#csvErrorTextContainer {
+    -fx-font-size: 12px;
+    -fx-font-family: Poppins, sans-serif;
+    -fx-padding: 5px;
+}
+#csvErrorText {
+    -fx-text-fill: #6a6d83;
 }
 .btn_container {
     -fx-background-radius: 10px;
@@ -191,6 +214,9 @@
 }
 .itemIconV2 {
     -fx-background-color: linear-gradient(to right, rgba(250,135,108,1), rgba(252,197,152,1));
+}
+.itemIconV3 {
+    -fx-background-color: linear-gradient(to right, rgba(255,28,67,1), rgba(255,72,94,1));
 }
 
 #mapMenusContainer {

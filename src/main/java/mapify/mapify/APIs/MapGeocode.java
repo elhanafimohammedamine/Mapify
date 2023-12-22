@@ -38,7 +38,7 @@ public class MapGeocode {
         }
         return null;
     }
-    private Controller.Location getLocation(String address) {
+    public Controller.Location getLocation(String address) {
         String getLocationLink = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=" + googleMapKey;
         String formattedLink = getLocationLink.replaceAll(" ", "%2C");
         JSONObject response = performFetchRequest(formattedLink);
