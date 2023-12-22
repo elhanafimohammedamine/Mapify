@@ -39,8 +39,26 @@ public class MapGeocode {
         return null;
     }
     public Controller.Location getLocation(String address) {
-        String getLocationLink = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=" + googleMapKey;
-        String formattedLink = getLocationLink.replaceAll(" ", "%2C");
+        String getLocationLink = "https://maps.googleapis.com/maps/api/geocode/json?fields=formatted_address%2Cgeometry&address=" + address + "&key=" + googleMapKey;
+        String formattedLink = formatAddress(getLocationLink);
+        JSONObject response = performFetchRequest(formattedLink);
+        if (response != null) {
+            JSONArray results = response.getJSONArray("results");
+            if (results.length() > 0) {
+                JSONObject resultObject = results.getJSONObject(0);
+                JSONObject geometry = resultObject.getJSONObject("geometry");
+                JSONObject location = geometry.getJSONObject("location");
+                String lat = String.valueOf(location.getDouble("lat"));
+                String lng = String.valueOf(location.getDouble("lng"));
+                return new Controller.Location(lat,lng);
+            }
+        }
+
+        return null;
+    }
+    public Controller.Location getUserLocation(String address) {
+        String getLocationLink = "https://maps.googleapis.com/maps/api/place/textsearch/json?fields=formatted_address%2Cgeometry&query=" + address + "&key=" + googleMapKey;
+        String formattedLink = formatAddress(getLocationLink);
         JSONObject response = performFetchRequest(formattedLink);
         if (response != null) {
             JSONArray results = response.getJSONArray("results");
@@ -57,7 +75,7 @@ public class MapGeocode {
         return null;
     }
     private LocationResult getLocationDetails(String placeId) {
-        String locationDetailLink = "https://maps.googleapis.com/maps/api/place/details/json?place_id=" + placeId + "&key=" + googleMapKey;
+        String locationDetailLink = "https://maps.googleapis.com/maps/api/place/details/json?fields=formatted_address%2Cgeometry&place_id=" + placeId + "&key=" + googleMapKey;
         JSONObject response = performFetchRequest(locationDetailLink);
         if (response != null && checkResponseStatus(response)) {
             JSONObject result = response.getJSONObject("result");
@@ -75,8 +93,8 @@ public class MapGeocode {
         predictedLocations.clear();
         Controller.Location addressLocation = getLocation(address);
         if (addressLocation != null) {
-            String autoCompleteLink = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input="+ address + "&location=" + addressLocation.latitude() + "%2C" + addressLocation.longitude() + "&radius=1000" + "&types=geocode&key=" + googleMapKey;
-            String formattedLink = autoCompleteLink.replaceAll(" ", "%2C");
+            String autoCompleteLink = "https://maps.googleapis.com/maps/api/place/autocomplete/json?fields=place_id&input="+ address + "&location=" + addressLocation.latitude() + "%2C" + addressLocation.longitude() + "&radius=1000" + "&types=geocode&key=" + googleMapKey;
+            String formattedLink = formatAddress(autoCompleteLink);
             JSONObject response = performFetchRequest(formattedLink);
             if (response != null && checkResponseStatus(response)) {
                 JSONArray predictions = response.getJSONArray("predictions");
@@ -104,5 +122,8 @@ public class MapGeocode {
     private boolean checkResponseStatus(JSONObject response) {
         String status = response.getString("status");
         return Objects.equals(status,"OK");
+    }
+    private String formatAddress(String address) {
+        return address.replaceAll(",", "").replaceAll("\"", "").replaceAll(" ", "%2C");
     }
 }

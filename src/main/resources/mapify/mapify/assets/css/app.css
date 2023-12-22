@@ -2,7 +2,7 @@
     -fx-background-color:  #eff1ff;
     -fx-padding: 20px 10px 20px 10px;
     -fx-alignment: center;
-    -fx-spacing: 10px;
+    -fx-spacing: 5px;
 }
 #sideBarContent {
     -fx-alignment: center;
@@ -266,7 +266,7 @@
 }
 #usersListContainer {
     -fx-padding: 10px;
-    -fx-spacing: 15px;
+    -fx-spacing: 10px;
     -fx-alignment: top-center;
     -fx-background-color: #eff1ff;
 }
@@ -347,3 +347,19 @@
     -fx-spacing: 8px;
 }
 
+#loadingLabel {
+    -fx-font-family: "Poppins Medium", sans-serif;
+    -fx-font-size: 15px;
+    -fx-text-fill: #3e3fff;
+}
+#backLoader {
+    -fx-background-color: transparent;
+    -fx-stroke-width: 4px;
+    -fx-stroke: #3e3fff;
+    -fx-opacity: 0.3;
+}
+#loader {
+    -fx-background-color: transparent;
+    -fx-stroke-width: 4px;
+    -fx-stroke: #3e3fff;
+}

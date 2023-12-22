@@ -13,6 +13,7 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", address='" + address + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
+                ", addressLocation=" + addressLocation +
                 '}';
     }
 

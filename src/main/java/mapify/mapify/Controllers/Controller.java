@@ -1,6 +1,7 @@
 package mapify.mapify.Controllers;
 
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -30,6 +31,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 public class Controller implements Initializable {
@@ -68,6 +72,7 @@ public class Controller implements Initializable {
     @FXML
     Label searchResultLabel;
     private FileChooserController fileChooserController = null;
+    private UsersListController usersListController = null;
 
 
     @Override
@@ -85,31 +90,72 @@ public class Controller implements Initializable {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/fileChooser.fxml")));
             Node node = loader.load();
             fileChooserController = loader.getController();
+            sideBarContent.getChildren().clear();
             sideBarContent.getChildren().add(node);
-            fileChooserController.hideFileComponent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void loadUsersListComponent() {
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/usersList.fxml")));
+            Node node = loader.load();
+            usersListController = loader.getController();
+            sideBarContent.getChildren().clear();
+            sideBarContent.getChildren().add(node);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void checkForCsvFileFormat() throws Exception {
+    private void checkCsvFileFormatAndGetUsersAddresses() throws Exception {
         CsvParserController csvController = new CsvParserController();
         if (csvController.checkForFileHeadersAndFormat(fileChooserController.getMainFile())) {
             userList = csvController.getCSVData(fileChooserController.getMainFile());
             if (userList.size() != 0) {
-                for (User user : userList){
-                    getUserLocation(user);
-                }
-                System.out.println(userList.toString());
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Future<?> future = executor.submit(() -> {
+                    for (User user : userList){
+                        searchForUserLocation(user);
+                    }
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Platform.runLater(() -> {
+                        loadUsersListComponent();
+                        for (User user : userList){
+                            try {
+                                loadUserItem(user);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                    });
+                });
+
+                executor.shutdown();
             }
         }
         else {
-            fileChooserController.loadFileErrorComponent();
+            fileChooserController.showFileErrorComponent();
         }
     }
-    private void getUserLocation(User user) {
-        Location userLocation = geocodeInstance.getLocation(user.getAddress());
-        user.setAddressLocation(userLocation);
+    private void searchForUserLocation(User user) {
+        Location userLocation = geocodeInstance.getUserLocation(user.getAddress());
+        user.setAddressLocation(Objects.requireNonNullElseGet(userLocation, () -> new Location(" ", " ")));
+    }
+    private void loadUserItem(User user) throws IOException {
+        FXMLLoader userLoader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/userItem.fxml")));
+        HBox userItem = userLoader.load();
+        if (userItem != null) {
+            UserItemController userItemController = userLoader.getController();
+            userItemController.setUserComponentData(user);
+            usersListController.addUserComponentToList(userItem);
+        }
     }
     public void showMapLayerMenu() {
         boolean visibility = MapLayersMenu.isVisible();
@@ -153,6 +199,7 @@ public class Controller implements Initializable {
         Button zoomBtn = (Button)event.getSource();
         String clickedZoomBtn = zoomBtn.getId();
         engine.executeScript("mapZoom('" + clickedZoomBtn + "')");
+        checkCsvFileFormatAndGetUsersAddresses();
     }
 
     private void handleRadiusChange() {

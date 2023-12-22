@@ -49,14 +49,14 @@ public class CsvParserController {
             boolean headersProcessed = false;
             String[] headers = null;
             while ((line = fileReader.readLine()) != null) {
-                String[] values = line.split(",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)");
+                String[] values = line.split(",");
                 if (!headersProcessed) {
                     headers = values;
                     headersProcessed = true;
                 } else {
                     String firstName = values[headersIndexes.get("firstname")];
                     String lastName = values[headersIndexes.get("lastname")];
-                    String address = values[headersIndexes.get("address")];
+                    String address = values[headersIndexes.get("address")].replaceAll("\"", "");
                     User userItem = new User(firstName,lastName,address);
                     if (headersIndexes.containsKey("phonenumber")){
                         String phoneNumber = values[headersIndexes.get("phonenumber")];

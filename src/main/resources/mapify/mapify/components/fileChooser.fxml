@@ -8,6 +8,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="589.0" prefWidth="271.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapify.mapify.Controllers.FileChooserController">
    <children>
@@ -77,6 +79,33 @@
                   </Button>
                </children>
             </HBox>
+            <VBox fx:id="csvErrorContainer" prefHeight="170.0" prefWidth="250.0" stylesheets="@../assets/css/app.css">
+               <children>
+                  <HBox fx:id="csvErrorHeader" alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="230.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="33.0" prefWidth="39.0" style="-fx-background-radius: 10px;">
+                           <children>
+                              <ImageView fitHeight="24.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/images/icons/icons8-erreur-96.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <styleClass>
+                              <String fx:value="itemIcon" />
+                              <String fx:value="itemIconV3" />
+                           </styleClass>
+                        </HBox>
+                        <Label prefHeight="18.0" prefWidth="119.0" styleClass="itemText" text="File format error " />
+                     </children>
+                  </HBox>
+                  <TextFlow fx:id="csvErrorTextContainer" prefHeight="114.0" prefWidth="230.0">
+                     <children>
+                        <Text fx:id="csvErrorText" fill="#3c3d46" strokeType="OUTSIDE" strokeWidth="0.0" text="Your CSV file should be structured with headers for 'First Name', 'Last Name', and 'Address' columns to smoothly upload the necessary information." wrappingWidth="205.8479766845703" />
+                     </children>
+                  </TextFlow>
+               </children>
+            </VBox>
          </children>
       </VBox>
    </children>

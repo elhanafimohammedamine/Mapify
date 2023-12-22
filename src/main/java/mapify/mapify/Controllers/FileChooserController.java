@@ -29,12 +29,12 @@ public class FileChooserController implements Initializable {
     @FXML
     private HBox fileContainer;
     @FXML
-    private VBox fileChooserContainer;
+    private VBox csvErrorContainer;
     private File mainFile = null;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        fileContainer.setVisible(false);
+        csvErrorContainer.setVisible(false);
     }
     public void chooseFileAction(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -47,6 +47,7 @@ public class FileChooserController implements Initializable {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             String formattedDate = dateFormat.format(uploadDate);
             fileUploadDateLabel.setText(formattedDate);
+            csvErrorContainer.setVisible(false);
             fileContainer.setVisible(true);
             fileNameLabel.setText(selectedFile.getName());
         }
@@ -54,13 +55,8 @@ public class FileChooserController implements Initializable {
             System.out.println("error !");
         }
     }
-    public void hideFileComponent() {
-        fileContainer.setVisible(false);
-    }
-    public void loadFileErrorComponent() throws IOException {
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/csvFileError.fxml")));
-        VBox errorComponent = loader.load();
-        fileChooserContainer.getChildren().add(errorComponent);
+    public void showFileErrorComponent() {
+        csvErrorContainer.setVisible(true);
     }
     public File getMainFile() {
         return mainFile;

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Arc?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="589.0" prefWidth="271.0" stylesheets="@../assets/css/app.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapify.mapify.Controllers.UsersListController">
+   <children>
+      <Circle fx:id="backLoader" fill="#1f93ff00" layoutX="136.0" layoutY="249.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="4.0" />
+      <Arc fx:id="loader" fill="#1f93ff00" layoutX="136.0" layoutY="249.0" length="270.0" radiusX="25.0" radiusY="25.0" startAngle="45.0" stroke="#ff3f3f" strokeLineCap="BUTT" strokeMiterLimit="20.0" strokeType="INSIDE" strokeWidth="4.0" />
+      <Label fx:id="loadingLabel" layoutX="95.0" layoutY="287.0" text="Tracking ..." />
+   </children>
+</AnchorPane>
