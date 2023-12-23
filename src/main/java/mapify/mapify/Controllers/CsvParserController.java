@@ -56,11 +56,14 @@ public class CsvParserController {
                 } else {
                     String firstName = values[headersIndexes.get("firstname")];
                     String lastName = values[headersIndexes.get("lastname")];
-                    String address = values[headersIndexes.get("address")].replaceAll("\"", "");
+                    String address = values[headersIndexes.get("address")].replaceAll("\"", "").replaceAll("'"," ");
                     User userItem = new User(firstName,lastName,address);
                     if (headersIndexes.containsKey("phonenumber")){
                         String phoneNumber = values[headersIndexes.get("phonenumber")];
                         userItem.setPhoneNumber(phoneNumber);
+                    }
+                    else {
+                        userItem.setPhoneNumber("No phone number provided");
                     }
                     usersList.add(userItem);
                 }

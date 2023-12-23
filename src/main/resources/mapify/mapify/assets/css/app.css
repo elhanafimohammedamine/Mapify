@@ -324,13 +324,17 @@
 }
 .userContainer {
     -fx-alignment: center;
-    -fx-padding: 8px;
-    -fx-spacing: 8px;
     -fx-border-width: 0 0 .5 0;
     -fx-border-color: #d3d7f5;
+    -fx-background-radius: 0px;
+    -fx-padding: 10px;
 }
 .userContainer:hover {
     -fx-background-color: #f3f3ff;
+}
+.userSubContainer {
+    -fx-alignment: center;
+    -fx-spacing: 8px;
 }
 .userTitle {
     -fx-font-family: "Poppins Medium", sans-serif;
@@ -366,13 +370,13 @@
 #searchBackLoader {
     -fx-alignment: center;
     -fx-background-color: transparent;
-    -fx-stroke-width: 2px;
+    -fx-stroke-width: 1.5px;
     -fx-stroke: #636780;
     -fx-opacity: 0.3;
 }
 #searchLoader {
     -fx-alignment: center;
     -fx-background-color: transparent;
-    -fx-stroke-width: 2px;
+    -fx-stroke-width: 1.5px;
     -fx-stroke: #636780;
 }

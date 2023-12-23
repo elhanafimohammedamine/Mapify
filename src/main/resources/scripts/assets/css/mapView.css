@@ -13,3 +13,43 @@
     height: 100vh;
     width: 100%;
 }
+
+.popup-container {
+    position: relative;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: start;
+    background: linear-gradient(90deg, rgba(113,78,255,1) 0%, rgba(84,74,255,1) 100%);
+    border-radius: 15px;
+    padding: 15px 20px;
+}
+.popup-content {
+    display: flex;flex-direction: column;justify-content: center;align-items: start;row-gap: 8px;
+}
+.popup-icon {
+    width: 20px;
+    aspect-ratio: 1/1;
+    color: #3e3fff;
+}
+.popup-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 10px;
+}
+.popup-text {
+    font-family: "Poppins Medium",sans-serif;
+    font-size: 14px;
+    color: #2d2c36;
+}
+.popup-triangle {
+    position: absolute;
+    width: 28px;
+    height: 20px;
+    clip-path: polygon(51% 100%, 0 0, 100% 0);
+    top: 100%;
+    left: 45%;
+    background-color: #fbfaff;
+}

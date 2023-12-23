@@ -2,9 +2,9 @@ package mapify.mapify.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,7 +18,7 @@ public class UsersListController implements Initializable {
 
     }
 
-    public void addUserComponentToList(HBox userItem) {
+    public void addUserComponentToList(Button userItem) {
         usersList.getChildren().add(userItem);
     }
 }

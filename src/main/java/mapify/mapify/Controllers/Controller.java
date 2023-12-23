@@ -26,6 +26,8 @@ import mapify.mapify.Models.LocationResult;
 import mapify.mapify.APIs.MapGeocode;
 import mapify.mapify.Models.User;
 import netscape.javascript.JSObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -145,7 +147,7 @@ public class Controller implements Initializable {
 
     private void searchForUserLocation(User user) {
         Location userLocation = geocodeInstance.getLocation(user.getAddress());
-        user.setAddressLocation(Objects.requireNonNullElseGet(userLocation, () -> new Location(" ", " ")));
+        user.setAddressLocation(userLocation);
     }
     private void loadUsersListComponent(List<User> userList) throws IOException {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/usersList.fxml")));
@@ -156,15 +158,47 @@ public class Controller implements Initializable {
             loadUserItem(user);
         }
         sideBarContent.getChildren().add(node);
+        addUsersMarkersToMap(userList);
     }
     private void loadUserItem(User user) throws IOException {
         FXMLLoader userLoader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/userItem.fxml")));
-        HBox userItem = userLoader.load();
+        Button userItem = userLoader.load();
         if (userItem != null) {
             UserItemController userItemController = userLoader.getController();
             userItemController.setUserComponentData(user);
+            userItem.setOnAction(event -> showUserPopup(user));
             usersListController.addUserComponentToList(userItem);
         }
+    }
+    private void addUsersMarkersToMap(List<User> users) {
+        JSONArray jsonArray = new JSONArray();
+        for (User user : users) {
+            if(user.getAddressLocation() != null) {
+                JSONObject json = new JSONObject();
+                json.put("lat", Double.parseDouble(user.getAddressLocation().latitude));
+                json.put("lng", Double.parseDouble(user.getAddressLocation().longitude));
+                jsonArray.put(json);
+            }
+        }
+        String jsonString = jsonArray.toString();
+        engine.executeScript("setUsersMarker(" + jsonString + ")");
+    }
+    private void showUserPopup(User user) {
+        JSONObject json = new JSONObject();
+        json.put("lat", Double.parseDouble(user.getAddressLocation().latitude));
+        json.put("lng", Double.parseDouble(user.getAddressLocation().longitude));
+        json.put("fullName", user.getLastName() + " " + user.getFirstName());
+        json.put("address", user.getAddress());
+        json.put("phoneNumber", user.getPhoneNumber());
+        String userJson = json.toString();
+        engine.executeScript("displayPopup('" + userJson + "')");
+    }
+    private boolean checkUserAddressLocation(User user) {
+        if (user.getAddressLocation() != null) {
+            return true;
+        }
+        
+        return false;
     }
     public void showMapLayerMenu() {
         boolean visibility = MapLayersMenu.isVisible();
