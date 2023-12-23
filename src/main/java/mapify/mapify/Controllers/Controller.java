@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Controller implements Initializable {
     private List<User> userList = new ArrayList<>();
     private static final MapGeocode geocodeInstance = new MapGeocode();
-    private Location deviceLocation = new Location(null,null);
+    private Location deviceLocation = null;
     private int circleRadius = 0;
     private boolean isRadiusChanged = false;
     private String oldSearchText = null;
@@ -126,7 +126,11 @@ public class Controller implements Initializable {
                 loadLoaderComponent();
                 CompletableFuture<Void> searchTask = CompletableFuture.runAsync(() -> {
                     for (User user : userList) {
-                        searchForUserLocation(user);
+                        try {
+                            searchForUserLocation(user);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 });
                 searchTask.thenRun(() -> {
@@ -145,8 +149,10 @@ public class Controller implements Initializable {
     }
 
 
-    private void searchForUserLocation(User user) {
+    private void searchForUserLocation(User user) throws IOException {
         Location userLocation = geocodeInstance.getLocation(user.getAddress());
+        //MapGeocode.Distance drivingDistanceInfos = geocodeInstance.getDistanceBetweenTwoPoints(deviceLocation,user.getAddressLocation(),"driving");
+        //MapGeocode.Distance walkingDistanceInfos = geocodeInstance.getDistanceBetweenTwoPoints(deviceLocation,user.getAddressLocation(),"walking");
         user.setAddressLocation(userLocation);
     }
     private void loadUsersListComponent(List<User> userList) throws IOException {
@@ -175,8 +181,8 @@ public class Controller implements Initializable {
         for (User user : users) {
             if(user.getAddressLocation() != null) {
                 JSONObject json = new JSONObject();
-                json.put("lat", Double.parseDouble(user.getAddressLocation().latitude));
-                json.put("lng", Double.parseDouble(user.getAddressLocation().longitude));
+                json.put("lat", user.getAddressLocation().latitude);
+                json.put("lng", user.getAddressLocation().longitude);
                 jsonArray.put(json);
             }
         }
@@ -185,8 +191,8 @@ public class Controller implements Initializable {
     }
     private void showUserPopup(User user) {
         JSONObject json = new JSONObject();
-        json.put("lat", Double.parseDouble(user.getAddressLocation().latitude));
-        json.put("lng", Double.parseDouble(user.getAddressLocation().longitude));
+        json.put("lat", user.getAddressLocation().latitude);
+        json.put("lng", user.getAddressLocation().longitude);
         json.put("fullName", user.getLastName() + " " + user.getFirstName());
         json.put("address", user.getAddress());
         json.put("phoneNumber", user.getPhoneNumber());
@@ -285,7 +291,7 @@ public class Controller implements Initializable {
         JSObject result = (JSObject) engine.executeScript("getMapView()");
         double latitude = (double) result.getMember("lat");
         double longitude = (double) result.getMember("lng");
-        return longitude == Double.parseDouble(deviceLocation.longitude()) && latitude == Double.parseDouble(deviceLocation.latitude());
+        return longitude == deviceLocation.longitude() && latitude == deviceLocation.latitude();
     }
     private String convertToMeterToKM(int distanceInMeter) {
         if (distanceInMeter > 999) {
@@ -296,8 +302,10 @@ public class Controller implements Initializable {
     }
     public void getCurrentLocation() throws IOException {
         // check if the device is already located or not
-        if (deviceLocation.latitude() == null && deviceLocation.longitude() == null) {
+        if (deviceLocation == null) {
             deviceLocation = geocodeInstance.getDeviceLocation();
+            MapGeocode.Distance drivingDistanceInfos = geocodeInstance.getDistanceBetweenTwoPoints(deviceLocation,new Location(35.121101,-3.8575188),"driving");
+            System.out.println(drivingDistanceInfos);
             engine.executeScript("goToLocation(" + deviceLocation.latitude() + "," + deviceLocation.longitude() + ", userPositionIcon)");
         }
     }
@@ -381,7 +389,7 @@ public class Controller implements Initializable {
     }
 
     // record to hold the device location
-    public record Location(String latitude, String longitude) {
+    public record Location(double latitude, double longitude) {
     }
 
 }

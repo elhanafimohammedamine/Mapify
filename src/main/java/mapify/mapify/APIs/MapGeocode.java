@@ -38,6 +38,35 @@ public class MapGeocode {
         }
         return null;
     }
+    public Distance getDistanceBetweenTwoPoints(Controller.Location origin, Controller.Location destination, String mode){
+        double originLat = origin.latitude();
+        double originLng = origin.longitude();
+        double destinationLat = destination.latitude();
+        double destinationLng = destination.longitude();
+        String getLocationLink = "https://maps.googleapis.com/maps/api/distancematrix/json?destinations="
+                + destinationLat + "%20" +
+                + destinationLng + "&origins="
+                + originLat + "%20"
+                + originLng +
+                "&mode=" + mode + "&key=" + googleMapKey;
+        String formattedLink = formatAddress(getLocationLink);
+        JSONObject response = performFetchRequest(formattedLink);
+        if (response != null) {
+            System.out.println(response);
+            JSONArray results = response.getJSONArray("rows");
+            if (results.length() > 0) {
+                JSONObject resultObject = results.getJSONObject(0);
+                JSONArray elements = resultObject.getJSONArray("elements");
+                JSONObject elementsObject = elements.getJSONObject(0);
+                JSONObject distance = elementsObject.getJSONObject("distance");
+                int distanceInKm = distance.getInt("value");
+                JSONObject duration = elementsObject.getJSONObject("duration");
+                int durationValue = duration.getInt("value");
+                return new Distance(distanceInKm, durationValue);
+            }
+        }
+        return null;
+    }
     public Controller.Location getLocation(String address) {
         String getLocationLink = "https://maps.googleapis.com/maps/api/place/textsearch/json?fields=formatted_address%2Cgeometry&query=" + address + "&key=" + googleMapKey;
         String formattedLink = formatAddress(getLocationLink);
@@ -48,8 +77,8 @@ public class MapGeocode {
                 JSONObject resultObject = results.getJSONObject(0);
                 JSONObject geometry = resultObject.getJSONObject("geometry");
                 JSONObject location = geometry.getJSONObject("location");
-                String lat = String.valueOf(location.getDouble("lat"));
-                String lng = String.valueOf(location.getDouble("lng"));
+                double lat =location.getDouble("lat");
+                double lng = location.getDouble("lng");
                 return new Controller.Location(lat,lng);
             }
         }
@@ -95,8 +124,8 @@ public class MapGeocode {
         if (response != null) {
             String loc = response.getString("loc");
             String[] coordinates = loc.split(",");
-            String latitude = coordinates[0];
-            String longitude = coordinates[1];
+            double latitude = Double.parseDouble(coordinates[0]);
+            double longitude = Double.parseDouble(coordinates[1]);
             return new Controller.Location(latitude, longitude);
         }
         return null;
@@ -107,5 +136,8 @@ public class MapGeocode {
     }
     private String formatAddress(String address) {
         return address.replaceAll(",", "").replaceAll("\"", "").replaceAll(" ", "%2C");
+    }
+    public record Distance(int distanceValue, int durationValue) {
+
     }
 }
