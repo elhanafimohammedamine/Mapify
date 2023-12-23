@@ -39,24 +39,6 @@ public class MapGeocode {
         return null;
     }
     public Controller.Location getLocation(String address) {
-        String getLocationLink = "https://maps.googleapis.com/maps/api/geocode/json?fields=formatted_address%2Cgeometry&address=" + address + "&key=" + googleMapKey;
-        String formattedLink = formatAddress(getLocationLink);
-        JSONObject response = performFetchRequest(formattedLink);
-        if (response != null) {
-            JSONArray results = response.getJSONArray("results");
-            if (results.length() > 0) {
-                JSONObject resultObject = results.getJSONObject(0);
-                JSONObject geometry = resultObject.getJSONObject("geometry");
-                JSONObject location = geometry.getJSONObject("location");
-                String lat = String.valueOf(location.getDouble("lat"));
-                String lng = String.valueOf(location.getDouble("lng"));
-                return new Controller.Location(lat,lng);
-            }
-        }
-
-        return null;
-    }
-    public Controller.Location getUserLocation(String address) {
         String getLocationLink = "https://maps.googleapis.com/maps/api/place/textsearch/json?fields=formatted_address%2Cgeometry&query=" + address + "&key=" + googleMapKey;
         String formattedLink = formatAddress(getLocationLink);
         JSONObject response = performFetchRequest(formattedLink);

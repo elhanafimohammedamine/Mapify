@@ -363,3 +363,16 @@
     -fx-stroke-width: 4px;
     -fx-stroke: #3e3fff;
 }
+#searchBackLoader {
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-stroke-width: 2px;
+    -fx-stroke: #636780;
+    -fx-opacity: 0.3;
+}
+#searchLoader {
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-stroke-width: 2px;
+    -fx-stroke: #636780;
+}

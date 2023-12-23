@@ -83,19 +83,11 @@
                <children>
                   <HBox fx:id="csvErrorHeader" alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="230.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="33.0" prefWidth="39.0" style="-fx-background-radius: 10px;">
-                           <children>
-                              <ImageView fitHeight="24.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../assets/images/icons/icons8-erreur-96.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                           <styleClass>
-                              <String fx:value="itemIcon" />
-                              <String fx:value="itemIconV3" />
-                           </styleClass>
-                        </HBox>
+                        <ImageView fitHeight="27.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/images/icons/icons8-erreur.png" />
+                           </image>
+                        </ImageView>
                         <Label prefHeight="18.0" prefWidth="119.0" styleClass="itemText" text="File format error " />
                      </children>
                   </HBox>

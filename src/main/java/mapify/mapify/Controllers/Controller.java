@@ -1,6 +1,6 @@
 package mapify.mapify.Controllers;
 
-import javafx.animation.FadeTransition;
+import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -9,7 +9,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.Arc;
 import javafx.util.Duration;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,20 +22,17 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
-import mapify.mapify.Database.MongoDBController;
 import mapify.mapify.Models.LocationResult;
 import mapify.mapify.APIs.MapGeocode;
 import mapify.mapify.Models.User;
 import netscape.javascript.JSObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class Controller implements Initializable {
@@ -42,6 +41,7 @@ public class Controller implements Initializable {
     private Location deviceLocation = new Location(null,null);
     private int circleRadius = 0;
     private boolean isRadiusChanged = false;
+    private String oldSearchText = null;
     private static WebEngine engine;
     @FXML
     private WebView mapView;
@@ -71,8 +71,13 @@ public class Controller implements Initializable {
     VBox searchResultList;
     @FXML
     Label searchResultLabel;
+    @FXML
+    private Arc searchLoader;
+    @FXML
+    private AnchorPane searchLoaderContainer;
     private FileChooserController fileChooserController = null;
     private UsersListController usersListController = null;
+    private LoaderController loaderController = null;
 
 
     @Override
@@ -81,6 +86,7 @@ public class Controller implements Initializable {
         engine.load(Objects.requireNonNull(getClass().getResource("/scripts/mapView.html")).toExternalForm());
         MapLayersMenu.setVisible(false);
         searchResultsBox.setVisible(false);
+        searchLoaderContainer.setVisible(false);
         loadSideBarComponent();
         handleRadiusChange();
         trackSearchLabel();
@@ -96,11 +102,12 @@ public class Controller implements Initializable {
             e.printStackTrace();
         }
     }
-    private void loadUsersListComponent() {
+
+    private void loadLoaderComponent() {
         try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/usersList.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/loader.fxml")));
             Node node = loader.load();
-            usersListController = loader.getController();
+            loaderController = loader.getController();
             sideBarContent.getChildren().clear();
             sideBarContent.getChildren().add(node);
         } catch (IOException e) {
@@ -108,45 +115,47 @@ public class Controller implements Initializable {
         }
     }
 
+
     private void checkCsvFileFormatAndGetUsersAddresses() throws Exception {
         CsvParserController csvController = new CsvParserController();
         if (csvController.checkForFileHeadersAndFormat(fileChooserController.getMainFile())) {
             userList = csvController.getCSVData(fileChooserController.getMainFile());
             if (userList.size() != 0) {
-                ExecutorService executor = Executors.newSingleThreadExecutor();
-                Future<?> future = executor.submit(() -> {
-                    for (User user : userList){
+                loadLoaderComponent();
+                CompletableFuture<Void> searchTask = CompletableFuture.runAsync(() -> {
+                    for (User user : userList) {
                         searchForUserLocation(user);
                     }
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
+                });
+                searchTask.thenRun(() -> {
                     Platform.runLater(() -> {
-                        loadUsersListComponent();
-                        for (User user : userList){
-                            try {
-                                loadUserItem(user);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
+                        try {
+                            loadUsersListComponent(userList);
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-
                     });
                 });
-
-                executor.shutdown();
             }
-        }
-        else {
+        } else {
             fileChooserController.showFileErrorComponent();
         }
     }
+
+
     private void searchForUserLocation(User user) {
-        Location userLocation = geocodeInstance.getUserLocation(user.getAddress());
+        Location userLocation = geocodeInstance.getLocation(user.getAddress());
         user.setAddressLocation(Objects.requireNonNullElseGet(userLocation, () -> new Location(" ", " ")));
+    }
+    private void loadUsersListComponent(List<User> userList) throws IOException {
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/usersList.fxml")));
+        Node node = loader.load();
+        usersListController = loader.getController();
+        sideBarContent.getChildren().clear();
+        for (User user : userList) {
+            loadUserItem(user);
+        }
+        sideBarContent.getChildren().add(node);
     }
     private void loadUserItem(User user) throws IOException {
         FXMLLoader userLoader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/userItem.fxml")));
@@ -261,25 +270,41 @@ public class Controller implements Initializable {
 
     @FXML
     private void performSearchOnMap() throws IOException {
-        ArrayList<LocationResult> autoCompleteResults = new ArrayList<>();
+        AtomicReference<ArrayList<LocationResult>> autoCompleteResults = new AtomicReference<>(new ArrayList<>());
         String searchAddress = searchBarLabel.getText();
-        if (!Objects.equals(searchAddress, " ")) {
-            autoCompleteResults = geocodeInstance.autoComplete(searchAddress);
+        if (!Objects.equals(searchAddress, " ") && !Objects.equals(searchAddress, oldSearchText)) {
+            oldSearchText = searchAddress;
+            animateSearchLoader(true);
+            CompletableFuture<Void> searchTask = CompletableFuture.runAsync(() -> {
+                autoCompleteResults.set(geocodeInstance.autoComplete(searchAddress));
+            });
+            searchTask.thenRun(() -> {
+                Platform.runLater(() -> {
+                    if (autoCompleteResults.get().size() > 0) {
+                        searchResultsBox.setVisible(true);
+                        for (LocationResult result : autoCompleteResults.get()) {
+                            loadSearchResult(result);
+                        }
+                    }
+                    else {
+                        searchBarLabel.setText("No places Found");
+                    }
+                    animateSearchLoader(false);
+                });
+            });
+
         }
-        if (autoCompleteResults.size() > 0) {
-            searchResultsBox.setVisible(true);
-            for (LocationResult result : autoCompleteResults) {
-                loadSearchResult(result);
-            }
-        }
-        else {
-            searchBarLabel.setText("No places Found");
-        }
+
     }
-    private void loadSearchResult(LocationResult result) throws IOException {
+    private void loadSearchResult(LocationResult result){
         // loading the search result item component
         FXMLLoader resultLoader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/searchResultItem.fxml")));
-        Button resultButton = resultLoader.load();
+        Button resultButton = null;
+        try {
+            resultButton = resultLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         if (resultButton != null) {
             // get the search result controller and set the data to the component
             SearchItemController searchResultItemController = resultLoader.getController();
@@ -303,6 +328,22 @@ public class Controller implements Initializable {
                 searchResultsBox.setVisible(false);
             }
         });
+    }
+
+    public void animateSearchLoader(boolean state){
+        searchLoaderContainer.setVisible(state);
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(searchLoader.lengthProperty(), 0)),
+                new KeyFrame(Duration.seconds(2), new KeyValue(searchLoader.lengthProperty(), 360))
+        );
+        timeline.setCycleCount(Animation.INDEFINITE);
+        if (state) {
+            timeline.play();
+        }
+        else {
+            timeline.stop();
+        }
+
     }
 
     // record to hold the device location
