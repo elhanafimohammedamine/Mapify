@@ -62,6 +62,11 @@ let userLocation = {
     latitude: null,
     longitude: null
 }
+let addedPopups = {};
+let previousRouting = null;
+let routePolyline = null;
+
+
 
 // functions definitions
 function initiateMapSetup(){
@@ -110,8 +115,6 @@ let userMarker = null
 let locationMarker = null
 function goToLocation(lat, lng, icon) {
     if (lat !== null && lng !== null) {
-        userLocation.latitude = lat
-        userLocation.longitude = lng
         if (locationMarker) {
             map.removeLayer(locationMarker)
         }
@@ -140,14 +143,46 @@ function displayCircle(radius) {
         circle.addTo(map);
     }
 }
+function routingTrack(originLat, originLng, destinationLat, destinationLng) {
+    let currentRouting = [originLat, originLng, destinationLat, destinationLng].join(',');
+    if (previousRouting === currentRouting) {
+        return;
+    }
+    let control = L.Routing.control({
+        waypoints: [
+            L.latLng(originLat, originLng),
+            L.latLng(destinationLat, destinationLng)
+        ],
+        show: false
+    }).addTo(map)
+    control.on('routesfound', function(e) {
+        let route = e.routes[0];
+        goToLocation(originLat, originLng, userPositionIcon)
+        routePolyline = L.polyline(route.coordinates, {
+            color: '#553cff',
+            opacity: 1,
+            weight: 6
+        }).addTo(map);
+        map.fitBounds(routePolyline.getBounds());
+        map.removeControl(control);
+    })
+    previousRouting = currentRouting;
+}
+function removeRoute(){
+    if (routePolyline) {
+        map.removeLayer(routePolyline)
+    }
+}
 
+//routingTrack(35.1646954,-3.8553517,35.1721635,-3.8628263)
 function displayPopup(user) {
     let userObject = JSON.parse(user);
     let location = L.latLng(userObject.lat, userObject.lng);
-    let popup = L.popup()
-        .setLatLng(location)
-        .setContent(popUpHtmlContent(userObject.fullName, userObject.address, userObject.phoneNumber))
-    popup.addTo(map)
+    let locationKey = `${userObject.lat}-${userObject.lng}`;
+    if (!addedPopups[locationKey]) {
+        let popupContent = popUpHtmlContent(userObject.fullName, userObject.address, userObject.phoneNumber);
+        addedPopups[locationKey] = L.popup().setLatLng(location).setContent(popupContent).addTo(map);
+    }
 }
 
 function getMapView() {
