@@ -51,8 +51,7 @@ public class MapGeocode {
                 "&mode=" + mode + "&key=" + googleMapKey;
         String formattedLink = formatAddress(getLocationLink);
         JSONObject response = performFetchRequest(formattedLink);
-        if (response != null) {
-            System.out.println(response);
+        if (response != null && checkResponseStatus(response)) {
             JSONArray results = response.getJSONArray("rows");
             if (results.length() > 0) {
                 JSONObject resultObject = results.getJSONObject(0);
@@ -61,8 +60,8 @@ public class MapGeocode {
                 JSONObject distance = elementsObject.getJSONObject("distance");
                 int distanceInKm = distance.getInt("value");
                 JSONObject duration = elementsObject.getJSONObject("duration");
-                int durationValue = duration.getInt("value");
-                return new Distance(distanceInKm, durationValue);
+                String  durationText = duration.getString("text").replace("day", "d").replace("hours","h").replace("mins", "min");
+                return new Distance(distanceInKm, durationText);
             }
         }
         return null;
@@ -71,7 +70,7 @@ public class MapGeocode {
         String getLocationLink = "https://maps.googleapis.com/maps/api/place/textsearch/json?fields=formatted_address%2Cgeometry&query=" + address + "&key=" + googleMapKey;
         String formattedLink = formatAddress(getLocationLink);
         JSONObject response = performFetchRequest(formattedLink);
-        if (response != null) {
+        if (response != null && checkResponseStatus(response)) {
             JSONArray results = response.getJSONArray("results");
             if (results.length() > 0) {
                 JSONObject resultObject = results.getJSONObject(0);
@@ -119,7 +118,7 @@ public class MapGeocode {
         }
         return predictedLocations;
     }
-    public Controller.Location getDeviceLocation() throws IOException {
+    public Controller.Location getDeviceLocation() {
         JSONObject response = performFetchRequest(IP_API_URL);
         if (response != null) {
             String loc = response.getString("loc");
@@ -137,7 +136,7 @@ public class MapGeocode {
     private String formatAddress(String address) {
         return address.replaceAll(",", "").replaceAll("\"", "").replaceAll(" ", "%2C");
     }
-    public record Distance(int distanceValue, int durationValue) {
+    public record Distance(int distanceValue, String durationText) {
 
     }
 }

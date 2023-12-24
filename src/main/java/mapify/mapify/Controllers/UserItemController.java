@@ -2,6 +2,7 @@ package mapify.mapify.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import mapify.mapify.Models.User;
 
@@ -14,6 +15,8 @@ public class UserItemController implements Initializable {
     private Label userName;
     @FXML
     private Label userAddress;
+    @FXML
+    private Button trackUserBtn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -22,5 +25,8 @@ public class UserItemController implements Initializable {
     public void setUserComponentData(User user) {
         userName.setText(user.getLastName() + " " + user.getFirstName());
         userAddress.setText(user.getAddress());
+    }
+    public Button getTrackButton() {
+        return trackUserBtn;
     }
 }

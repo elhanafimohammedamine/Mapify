@@ -5,26 +5,14 @@ import mapify.mapify.Controllers.Controller;
 public class User {
     private String firstName;
     private String lastName;
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", address='" + address + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", addressLocation=" + addressLocation +
-                '}';
-    }
-
     private String address;
     private String phoneNumber;
     private Controller.Location addressLocation;
-    private double distanceToDeviceLocationWithFoot;
-    private double distanceToDeviceLocationWithCar;
-    private double distanceToDeviceLocation;
+    private String  durationToDeviceLocationWithFoot;
+    private String  durationToDeviceLocationWithCar;
+    private int distanceToDeviceLocation;
 
-    User() {
+    public User() {
     }
     public User(String firstName, String lastName, String address) {
         this.firstName = firstName;
@@ -72,28 +60,42 @@ public class User {
         this.addressLocation = addressLocation;
     }
 
-    public double getDistanceToDeviceLocationWithFoot() {
-        return distanceToDeviceLocationWithFoot;
+    public String getDurationToDeviceLocationWithFoot() {
+        return durationToDeviceLocationWithFoot;
     }
 
-    public void setDistanceToDeviceLocationWithFoot(double distanceToDeviceLocationWithFoot) {
-        this.distanceToDeviceLocationWithFoot = distanceToDeviceLocationWithFoot;
+    public void setDurationToDeviceLocationWithFoot(String durationToDeviceLocationWithFoot) {
+        this.durationToDeviceLocationWithFoot = durationToDeviceLocationWithFoot;
     }
 
-    public double getDistanceToDeviceLocationWithCar() {
-        return distanceToDeviceLocationWithCar;
+    public String getDurationToDeviceLocationWithCar() {
+        return durationToDeviceLocationWithCar;
     }
 
-    public void setDistanceToDeviceLocationWithCar(double distanceToDeviceLocationWithCar) {
-        this.distanceToDeviceLocationWithCar = distanceToDeviceLocationWithCar;
+    public void setDurationToDeviceLocationWithCar(String  durationToDeviceLocationWithCar) {
+        this.durationToDeviceLocationWithCar = durationToDeviceLocationWithCar;
     }
 
-    public double getDistanceToDeviceLocation() {
+    public int getDistanceToDeviceLocation() {
         return distanceToDeviceLocation;
     }
 
-    public void setDistanceToDeviceLocation(double distanceToDeviceLocation) {
+    public void setDistanceToDeviceLocation(int distanceToDeviceLocation) {
         this.distanceToDeviceLocation = distanceToDeviceLocation;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", addressLocation=" + addressLocation +
+                ", durationToDeviceLocationWithFoot=" + durationToDeviceLocationWithFoot +
+                ", durationToDeviceLocationWithCar=" + durationToDeviceLocationWithCar +
+                ", distanceToDeviceLocation=" + distanceToDeviceLocation +
+                '}';
     }
 
 }

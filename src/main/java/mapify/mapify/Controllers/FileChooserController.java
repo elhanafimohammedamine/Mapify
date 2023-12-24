@@ -30,6 +30,8 @@ public class FileChooserController implements Initializable {
     private HBox fileContainer;
     @FXML
     private VBox csvErrorContainer;
+    @FXML
+    public Button locateBtn;
     private File mainFile = null;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

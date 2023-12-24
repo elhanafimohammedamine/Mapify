@@ -74,6 +74,18 @@ public class Controller implements Initializable {
     @FXML
     Label searchResultLabel;
     @FXML
+    private HBox addressNotFoundError;
+    @FXML
+    private Button addressErrorCloseBtn;
+    @FXML
+    private Label walkingDistanceInfo;
+    @FXML
+    private Label drivingDistanceInfo;
+    @FXML
+    private Label distanceInfo;
+    @FXML
+    private Button distanceBarCloseBtn;
+    @FXML
     private Arc searchLoader;
     @FXML
     private AnchorPane searchLoaderContainer;
@@ -89,6 +101,9 @@ public class Controller implements Initializable {
         MapLayersMenu.setVisible(false);
         searchResultsBox.setVisible(false);
         searchLoaderContainer.setVisible(false);
+        distanceBarContainer.setVisible(false);
+        addressNotFoundError.setVisible(false);
+        addressErrorCloseBtn.setOnAction(event -> addressNotFoundError.setVisible(false));
         loadSideBarComponent();
         handleRadiusChange();
         trackSearchLabel();
@@ -98,6 +113,7 @@ public class Controller implements Initializable {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/fileChooser.fxml")));
             Node node = loader.load();
             fileChooserController = loader.getController();
+            fileChooserController.locateBtn.setOnAction(event -> checkCsvFileFormatAndGetUsersAddresses());
             sideBarContent.getChildren().clear();
             sideBarContent.getChildren().add(node);
         } catch (IOException e) {
@@ -118,7 +134,7 @@ public class Controller implements Initializable {
     }
 
 
-    private void checkCsvFileFormatAndGetUsersAddresses() throws Exception {
+    private void checkCsvFileFormatAndGetUsersAddresses() {
         CsvParserController csvController = new CsvParserController();
         if (csvController.checkForFileHeadersAndFormat(fileChooserController.getMainFile())) {
             userList = csvController.getCSVData(fileChooserController.getMainFile());
@@ -126,11 +142,10 @@ public class Controller implements Initializable {
                 loadLoaderComponent();
                 CompletableFuture<Void> searchTask = CompletableFuture.runAsync(() -> {
                     for (User user : userList) {
-                        try {
-                            searchForUserLocation(user);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+                        searchForUserLocation(user);
+                    }
+                    for (User user : userList) {
+                        getUserDistanceInfos(user);
                     }
                 });
                 searchTask.thenRun(() -> {
@@ -149,12 +164,23 @@ public class Controller implements Initializable {
     }
 
 
-    private void searchForUserLocation(User user) throws IOException {
+    private void searchForUserLocation(User user) {
         Location userLocation = geocodeInstance.getLocation(user.getAddress());
-        //MapGeocode.Distance drivingDistanceInfos = geocodeInstance.getDistanceBetweenTwoPoints(deviceLocation,user.getAddressLocation(),"driving");
-        //MapGeocode.Distance walkingDistanceInfos = geocodeInstance.getDistanceBetweenTwoPoints(deviceLocation,user.getAddressLocation(),"walking");
         user.setAddressLocation(userLocation);
     }
+    private void getUserDistanceInfos(User user){
+        if (deviceLocation == null) {
+            deviceLocation = geocodeInstance.getDeviceLocation();
+        }
+        if (user.getAddressLocation() != null) {
+            MapGeocode.Distance drivingDistanceInfos = geocodeInstance.getDistanceBetweenTwoPoints(deviceLocation, user.getAddressLocation(), "driving");
+            MapGeocode.Distance walkingDistanceInfos = geocodeInstance.getDistanceBetweenTwoPoints(deviceLocation, user.getAddressLocation(), "walking");
+            user.setDistanceToDeviceLocation(drivingDistanceInfos.distanceValue());
+            user.setDurationToDeviceLocationWithCar(drivingDistanceInfos.durationText());
+            user.setDurationToDeviceLocationWithFoot(walkingDistanceInfos.durationText());
+        }
+    }
+
     private void loadUsersListComponent(List<User> userList) throws IOException {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/usersList.fxml")));
         Node node = loader.load();
@@ -173,6 +199,8 @@ public class Controller implements Initializable {
             UserItemController userItemController = userLoader.getController();
             userItemController.setUserComponentData(user);
             userItem.setOnAction(event -> showUserPopup(user));
+            Button trackButton = userItemController.getTrackButton();
+            trackButton.setOnAction(event -> showDistanceInfos(user));
             usersListController.addUserComponentToList(userItem);
         }
     }
@@ -189,22 +217,31 @@ public class Controller implements Initializable {
         String jsonString = jsonArray.toString();
         engine.executeScript("setUsersMarker(" + jsonString + ")");
     }
-    private void showUserPopup(User user) {
-        JSONObject json = new JSONObject();
-        json.put("lat", user.getAddressLocation().latitude);
-        json.put("lng", user.getAddressLocation().longitude);
-        json.put("fullName", user.getLastName() + " " + user.getFirstName());
-        json.put("address", user.getAddress());
-        json.put("phoneNumber", user.getPhoneNumber());
-        String userJson = json.toString();
-        engine.executeScript("displayPopup('" + userJson + "')");
-    }
-    private boolean checkUserAddressLocation(User user) {
+    private void showDistanceInfos(User user) {
         if (user.getAddressLocation() != null) {
-            return true;
+            addressNotFoundError.setVisible(false);
+            distanceBarContainer.setVisible(true);
+            drivingDistanceInfo.setText(user.getDurationToDeviceLocationWithCar());
+            walkingDistanceInfo.setText(user.getDurationToDeviceLocationWithFoot());
+            distanceInfo.setText(convertToMeterToKM(user.getDistanceToDeviceLocation()));
+            distanceBarCloseBtn.setOnAction(event -> distanceBarContainer.setVisible(false));
         }
-        
-        return false;
+    }
+    private void showUserPopup(User user) {
+        if (user.getAddressLocation() == null) {
+            distanceBarContainer.setVisible(false);
+            addressNotFoundError.setVisible(true);
+        }
+        else {
+            JSONObject json = new JSONObject();
+            json.put("lat", user.getAddressLocation().latitude);
+            json.put("lng", user.getAddressLocation().longitude);
+            json.put("fullName", user.getLastName() + " " + user.getFirstName());
+            json.put("address", user.getAddress());
+            json.put("phoneNumber", user.getPhoneNumber());
+            String userJson = json.toString();
+            engine.executeScript("displayPopup('" + userJson + "')");
+        }
     }
     public void showMapLayerMenu() {
         boolean visibility = MapLayersMenu.isVisible();
@@ -244,11 +281,10 @@ public class Controller implements Initializable {
         showMapLayerMenu();
     }
 
-    public void mapZoom(ActionEvent event) throws Exception {
+    public void mapZoom(ActionEvent event) {
         Button zoomBtn = (Button)event.getSource();
         String clickedZoomBtn = zoomBtn.getId();
         engine.executeScript("mapZoom('" + clickedZoomBtn + "')");
-        checkCsvFileFormatAndGetUsersAddresses();
     }
 
     private void handleRadiusChange() {
@@ -295,7 +331,7 @@ public class Controller implements Initializable {
     }
     private String convertToMeterToKM(int distanceInMeter) {
         if (distanceInMeter > 999) {
-            DecimalFormat decimalFormat = new DecimalFormat("#.###");
+            DecimalFormat decimalFormat = new DecimalFormat("#.#");
             return decimalFormat.format((double) distanceInMeter/1000) + " Km";
         }
         return Integer.toString(distanceInMeter) + " m";
@@ -304,10 +340,8 @@ public class Controller implements Initializable {
         // check if the device is already located or not
         if (deviceLocation == null) {
             deviceLocation = geocodeInstance.getDeviceLocation();
-            MapGeocode.Distance drivingDistanceInfos = geocodeInstance.getDistanceBetweenTwoPoints(deviceLocation,new Location(35.121101,-3.8575188),"driving");
-            System.out.println(drivingDistanceInfos);
-            engine.executeScript("goToLocation(" + deviceLocation.latitude() + "," + deviceLocation.longitude() + ", userPositionIcon)");
         }
+        engine.executeScript("goToLocation(" + deviceLocation.latitude() + "," + deviceLocation.longitude() + ", userPositionIcon)");
     }
 
     @FXML

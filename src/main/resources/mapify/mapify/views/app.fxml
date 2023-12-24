@@ -53,6 +53,25 @@
             </HBox>
          </children>
       </VBox>
+      <HBox fx:id="addressNotFoundError" layoutX="524.0" layoutY="560.0" prefHeight="56.0" prefWidth="444.0" spacing="10.0" style="-fx-padding: 10px;" styleClass="errorContainer" stylesheets="@../assets/css/app.css">
+         <children>
+            <ImageView fitHeight="28.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/images/icons/icons8-erreur.png" />
+               </image>
+            </ImageView>
+            <Label prefHeight="20.0" prefWidth="357.0" styleClass="itemText" text="user address could not be found." />
+            <Button fx:id="addressErrorCloseBtn" mnemonicParsing="false" styleClass="btn_container">
+               <graphic>
+                  <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/images/icons/icons8-effacer-962.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
       <HBox fx:id="searchBar" alignment="CENTER_LEFT" layoutX="516.0" layoutY="14.0" prefHeight="56.0" prefWidth="460.0" stylesheets="@../assets/css/app.css">
          <children>
             <TextField fx:id="searchBarLabel" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="414.0" promptText="Search on map" style="-fx-background-color: transparent;">
@@ -90,30 +109,30 @@
       </HBox>
       <HBox fx:id="distanceBarContainer" layoutX="524.0" layoutY="564.0" prefHeight="54.0" prefWidth="444.0" spacing="10.0" style="-fx-padding: 10px;" stylesheets="@../assets/css/app.css">
          <children>
-            <HBox prefHeight="34.0" prefWidth="86.0" styleClass="distanceBarInfo">
+            <HBox prefHeight="34.0" prefWidth="112.0" styleClass="distanceBarInfo">
                <children>
                   <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../assets/images/icons/icons8-marche-52.png" />
                      </image>
                   </ImageView>
-                  <Label prefHeight="18.0" prefWidth="45.0" styleClass="distanceBarInfoText" text="45 min" />
+                  <Label fx:id="walkingDistanceInfo" prefHeight="18.0" prefWidth="86.0" styleClass="distanceBarInfoText" text="45 min" />
                </children>
             </HBox>
-            <HBox prefHeight="34.0" prefWidth="86.0" styleClass="distanceBarInfo">
+            <HBox prefHeight="34.0" prefWidth="118.0" styleClass="distanceBarInfo">
                <children>
                   <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../assets/images/icons/icons8-voiture-90.png" />
                      </image>
                   </ImageView>
-                  <Label prefHeight="18.0" prefWidth="45.0" styleClass="distanceBarInfoText" text="45 min" />
+                  <Label fx:id="drivingDistanceInfo" prefHeight="18.0" prefWidth="91.0" styleClass="distanceBarInfoText" text="45 min" />
                </children>
             </HBox>
-            <Label prefHeight="32.0" prefWidth="111.0" styleClass="distanceBarText" text="2.2 Km" />
-            <Button fx:id="distanceCloseBtn" mnemonicParsing="false">
+            <Label fx:id="distanceInfo" prefHeight="32.0" prefWidth="118.0" styleClass="distanceBarText" text="2.2 Km" />
+            <Button fx:id="distanceBarCloseBtn" mnemonicParsing="false" prefHeight="23.0" prefWidth="23.0">
                <graphic>
-                  <ImageView fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="25.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../assets/images/icons/close.png" />
                      </image>
@@ -213,6 +232,5 @@
                </children>
             </HBox>
          </children></HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0" />
    </children>
 </AnchorPane>

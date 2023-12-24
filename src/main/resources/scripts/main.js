@@ -137,7 +137,7 @@ function displayCircle(radius) {
     if (userLocation.longitude !== null && userLocation.latitude !== null) {
         circle.setLatLng([userLocation.latitude, userLocation.longitude])
         circle.setRadius(radius)
-        circle.addTo(map)
+        circle.addTo(map);
     }
 }
 
@@ -147,7 +147,7 @@ function displayPopup(user) {
     let popup = L.popup()
         .setLatLng(location)
         .setContent(popUpHtmlContent(userObject.fullName, userObject.address, userObject.phoneNumber))
-        .openOn(map);
+    popup.addTo(map)
 }
 
 function getMapView() {

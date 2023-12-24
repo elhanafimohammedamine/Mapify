@@ -228,7 +228,7 @@
     -fx-background-radius: 20px;
     -fx-padding: 10px;
     -fx-alignment: center;
-    -fx-spacing: 10px;
+    -fx-spacing: 8px;
 }
 #distanceCloseBtn {
     -fx-cursor: hand;
@@ -245,7 +245,7 @@
 .distanceBarInfoText {
     -fx-font-family: "Poppins Medium", sans-serif;
     -fx-text-fill: #ffffff;
-    -fx-font-size: 12px;
+    -fx-font-size: 14px;
 }
 #MapLayersMenu {
     -fx-alignment: center;
@@ -379,4 +379,12 @@
     -fx-background-color: transparent;
     -fx-stroke-width: 1.5px;
     -fx-stroke: #636780;
+}
+
+.errorContainer {
+    -fx-alignment: center-left;
+    -fx-spacing: 10px;
+    -fx-padding: 10px;
+    -fx-background-color: #fff;
+    -fx-background-radius: 15px;
 }
