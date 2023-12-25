@@ -131,9 +131,6 @@ function goToDeviceLocation(lat, lng) {
 
 function goToLocation(lat, lng) {
     if (lat !== null && lng !== null) {
-        if (deviceMarker) {
-            map.removeLayer(deviceMarker)
-        }
         if (locationMarker){
             map.removeLayer(locationMarker)
             locationMarker = L.marker([lat, lng], {icon: normalPositionIcon}).addTo(map)
