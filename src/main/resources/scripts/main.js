@@ -58,11 +58,8 @@ let circle = L.circle([null, null], {
     fillOpacity: 0.4,
     radius: null
 })
-let userLocation = {
-    latitude: null,
-    longitude: null
-}
-let addedPopups = {};
+let userLocation = null
+let openedPopup = null;
 let previousRouting = null;
 let routePolyline = null;
 
@@ -118,7 +115,11 @@ function goToLocation(lat, lng, icon) {
         if (locationMarker) {
             map.removeLayer(locationMarker)
         }
-        if (icon === userPositionIcon ){
+        if (icon === userPositionIcon && userLocation == null){
+            userLocation = {
+                lat: lat,
+                lng: lng
+            }
             userMarker = L.marker([lat, lng], {icon: icon}).addTo(map)
         }
         else {
@@ -137,8 +138,8 @@ function setUsersMarker(locations) {
     map.setView([firstUserLat, firstUserLng], 13);
 }
 function displayCircle(radius) {
-    if (userLocation.longitude !== null && userLocation.latitude !== null) {
-        circle.setLatLng([userLocation.latitude, userLocation.longitude])
+    if (userLocation !== null) {
+        circle.setLatLng([userLocation.lat, userLocation.lng])
         circle.setRadius(radius)
         circle.addTo(map);
     }
@@ -147,6 +148,9 @@ function routingTrack(originLat, originLng, destinationLat, destinationLng) {
     let currentRouting = [originLat, originLng, destinationLat, destinationLng].join(',');
     if (previousRouting === currentRouting) {
         return;
+    }
+    if (routePolyline) {
+        map.removeLayer(routePolyline);
     }
     let control = L.Routing.control({
         waypoints: [
@@ -157,6 +161,7 @@ function routingTrack(originLat, originLng, destinationLat, destinationLng) {
     }).addTo(map)
     control.on('routesfound', function(e) {
         let route = e.routes[0];
+        console.log(route)
         goToLocation(originLat, originLng, userPositionIcon)
         routePolyline = L.polyline(route.coordinates, {
             color: '#553cff',
@@ -178,10 +183,21 @@ function removeRoute(){
 function displayPopup(user) {
     let userObject = JSON.parse(user);
     let location = L.latLng(userObject.lat, userObject.lng);
-    let locationKey = `${userObject.lat}-${userObject.lng}`;
-    if (!addedPopups[locationKey]) {
-        let popupContent = popUpHtmlContent(userObject.fullName, userObject.address, userObject.phoneNumber);
-        addedPopups[locationKey] = L.popup().setLatLng(location).setContent(popupContent).addTo(map);
+    let popupContent = popUpHtmlContent(userObject.fullName, userObject.address, userObject.phoneNumber);
+    let newPopup = L.popup().setLatLng(location).setContent(popupContent);
+    if (openedPopup != null) {
+        if (openedPopup !== newPopup) {
+            map.removeLayer(openedPopup)
+            newPopup.addTo(map)
+            openedPopup = newPopup
+        }
+        else {
+            openedPopup.addTo(map)
+        }
+    }
+    else {
+        newPopup.addTo(map)
+        openedPopup = newPopup
     }
 }
 

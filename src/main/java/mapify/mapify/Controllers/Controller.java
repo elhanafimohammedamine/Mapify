@@ -39,11 +39,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Controller implements Initializable {
     private List<User> userList = new ArrayList<>();
+    private List<User> usersInRadiusBorders = new ArrayList<>();
     private static final MapGeocode geocodeInstance = new MapGeocode();
     private Location deviceLocation = null;
-    private int circleRadius = 0;
     private boolean isRadiusChanged = false;
-    private String oldSearchText = null;
     private static WebEngine engine;
     @FXML
     private WebView mapView;
@@ -224,8 +223,18 @@ public class Controller implements Initializable {
             drivingDistanceInfo.setText(user.getDurationToDeviceLocationWithCar());
             walkingDistanceInfo.setText(user.getDurationToDeviceLocationWithFoot());
             distanceInfo.setText(convertToMeterToKM(user.getDistanceToDeviceLocation()));
-            distanceBarCloseBtn.setOnAction(event -> distanceBarContainer.setVisible(false));
+            distanceBarCloseBtn.setOnAction(event -> removeDistanceInfosAndRouting());
+            double originLat = deviceLocation.latitude;
+            double originLng = deviceLocation.longitude;
+            double destinationLat = user.getAddressLocation().latitude;
+            double destinationLng = user.getAddressLocation().longitude;
+            engine.executeScript("routingTrack(" + originLat + "," + originLng + "," + destinationLat + "," + destinationLng + ")");
         }
+    }
+
+    private void removeDistanceInfosAndRouting() {
+        engine.executeScript("removeRoute()");
+        distanceBarContainer.setVisible(false);
     }
     private void showUserPopup(User user) {
         if (user.getAddressLocation() == null) {
@@ -288,29 +297,29 @@ public class Controller implements Initializable {
     }
 
     private void handleRadiusChange() {
-        circleRadius = (int) downBarSlider.getValue();
+        int circleRadius = (int) downBarSlider.getValue();
         sliderLabel.setText(convertToMeterToKM(circleRadius));
         downBarSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                circleRadius = (int) downBarSlider.getValue();
+                int circleRadius = (int) downBarSlider.getValue();
                 // invoke the function that changes the circle radius in javascript code
-                invokeJSCodeOnRadiusChange();
+                invokeJSCodeOnRadiusChange(circleRadius);
                 sliderLabel.setText(convertToMeterToKM(circleRadius));
             }
         });
     }
-    private void invokeJSCodeOnRadiusChange() {
+    private void invokeJSCodeOnRadiusChange(int radius) {
         // check if the circle radius has changed for the first time
         // to call getCurrentLocation
-        if (circleRadius > 0 && !isRadiusChanged) {
+        if (radius > 0 && !isRadiusChanged) {
             isRadiusChanged = true;
             try {
                 getCurrentLocation();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            engine.executeScript("displayCircle('" + circleRadius + "')");
+            engine.executeScript("displayCircle('" + radius + "')");
         }
         else {
             // if the map view is not set to the device location when trying to change the circle radius
@@ -319,7 +328,16 @@ public class Controller implements Initializable {
                 String script = "map.setView([" + deviceLocation.latitude() + ", " + deviceLocation.longitude() + "], 13)";
                 engine.executeScript(script);
             }
-            engine.executeScript("circle.setRadius('" + circleRadius + "')");
+            engine.executeScript("circle.setRadius('" + radius + "')");
+        }
+    }
+    private void getUsersInRadiusBorders(int radius) {
+        if (userList.size() > 0) {
+            for (User user : userList) {
+                if (user.getAddressLocation() != null && user.getDistanceToDeviceLocation() <= radius) {
+                    usersInRadiusBorders.add(user);
+                }
+            }
         }
     }
     // check if the map view is set to the device location or not
@@ -348,8 +366,7 @@ public class Controller implements Initializable {
     private void performSearchOnMap() throws IOException {
         AtomicReference<ArrayList<LocationResult>> autoCompleteResults = new AtomicReference<>(new ArrayList<>());
         String searchAddress = searchBarLabel.getText();
-        if (!Objects.equals(searchAddress, " ") && !Objects.equals(searchAddress, oldSearchText)) {
-            oldSearchText = searchAddress;
+        if (!Objects.equals(searchAddress, " ")) {
             animateSearchLoader(true);
             CompletableFuture<Void> searchTask = CompletableFuture.runAsync(() -> {
                 autoCompleteResults.set(geocodeInstance.autoComplete(searchAddress));

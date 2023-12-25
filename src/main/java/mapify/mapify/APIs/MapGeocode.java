@@ -134,7 +134,11 @@ public class MapGeocode {
         return Objects.equals(status,"OK");
     }
     private String formatAddress(String address) {
-        return address.replaceAll(",", "").replaceAll("\"", "").replaceAll(" ", "%2C");
+        return address.replaceAll(",", "")
+                .replaceAll("\"", "")
+                .replaceAll(" ", "%2C")
+                .replaceAll("<", "")
+                .replaceAll(">","");
     }
     public record Distance(int distanceValue, String durationText) {
 
