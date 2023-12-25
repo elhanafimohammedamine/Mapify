@@ -195,9 +195,7 @@ public class Controller implements Initializable {
             loadUserItem(user);
         }
         sideBarContent.getChildren().add(node);
-        if (userList.size() > 0) {
-            addUsersMarkersToMap(userList);
-        }
+        addUsersMarkersToMap(userList);
     }
     private void loadUserItem(User user) throws IOException {
         FXMLLoader userLoader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/userItem.fxml")));
@@ -384,7 +382,7 @@ public class Controller implements Initializable {
         if (deviceLocation == null) {
             deviceLocation = geocodeInstance.getDeviceLocation();
         }
-        engine.executeScript("goToLocation(" + deviceLocation.latitude() + "," + deviceLocation.longitude() + ", userPositionIcon)");
+        engine.executeScript("goToDeviceLocation(" + deviceLocation.latitude() + "," + deviceLocation.longitude() + ")");
     }
 
     @FXML
@@ -432,7 +430,7 @@ public class Controller implements Initializable {
         }
     }
     private void setMapViewToResultLocation(double lat, double lng, String placeName) {
-        engine.executeScript("goToLocation(" + lat + "," + lng + ", normalPositionIcon)");
+        engine.executeScript("goToLocation(" + lat + "," + lng + ")");
         searchBarLabel.setText(placeName);
         searchResultsBox.setVisible(false);
     }

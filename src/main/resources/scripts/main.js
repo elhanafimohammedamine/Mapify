@@ -109,37 +109,53 @@ function mapZoom(zoomBtnId) {
             break
     }
 }
-let userMarker = null
+let deviceMarker = null
 let locationMarker = null
-function goToLocation(lat, lng, icon) {
+function goToDeviceLocation(lat, lng) {
     if (lat !== null && lng !== null) {
         if (locationMarker) {
             map.removeLayer(locationMarker)
         }
-        if (icon === userPositionIcon && userLocation == null){
+        if (userLocation == null){
             userLocation = {
                 lat: lat,
                 lng: lng
             }
-            userMarker = L.marker([lat, lng], {icon: icon}).addTo(map)
-        }
-        else {
-            locationMarker = L.marker([lat, lng], {icon: icon}).addTo(map)
+            if (!deviceMarker) {
+                deviceMarker = L.marker([lat, lng], {icon: userPositionIcon}).addTo(map)
+            }
         }
         map.setView([lat, lng], 13);
     }
 }
 
+function goToLocation(lat, lng) {
+    if (lat !== null && lng !== null) {
+        if (deviceMarker) {
+            map.removeLayer(deviceMarker)
+        }
+        if (locationMarker){
+            map.removeLayer(locationMarker)
+            locationMarker = L.marker([lat, lng], {icon: normalPositionIcon}).addTo(map)
+        }
+        else {
+            locationMarker = L.marker([lat, lng], {icon: normalPositionIcon}).addTo(map)
+        }
+        map.setView([lat, lng], 13);
+    }
+}
 function setUsersMarker(locations) {
     usersMarkers.clearLayers();
-    let firstUserLat = locations[0].lat
-    let firstUserLng = locations[0].lng
-    locations.forEach(function(location) {
-        let marker = L.marker([location.lat, location.lng], {icon: userIcon});
-        usersMarkers.addLayer(marker)
-    });
-    usersMarkers.addTo(map)
-    map.setView([firstUserLat, firstUserLng], 13);
+    if (locations.length > 0) {
+        let firstUserLat = locations[0].lat
+        let firstUserLng = locations[0].lng
+        locations.forEach(function(location) {
+            let marker = L.marker([location.lat, location.lng], {icon: userIcon});
+            usersMarkers.addLayer(marker)
+        });
+        usersMarkers.addTo(map)
+        map.setView([firstUserLat, firstUserLng], 13);
+    }
 }
 function displayCircle(radius) {
     if (userLocation !== null) {
@@ -166,7 +182,7 @@ function routingTrack(originLat, originLng, destinationLat, destinationLng) {
     control.on('routesfound', function(e) {
         let route = e.routes[0];
         console.log(route)
-        goToLocation(originLat, originLng, userPositionIcon)
+        goToDeviceLocation(originLat, originLng)
         routePolyline = L.polyline(route.coordinates, {
             color: '#553cff',
             opacity: 1,
@@ -187,6 +203,7 @@ function removeRoute(){
 function displayPopup(user) {
     let userObject = JSON.parse(user);
     let location = L.latLng(userObject.lat, userObject.lng);
+    map.setView(location, 13);
     let popupContent = popUpHtmlContent(userObject.fullName, userObject.address, userObject.phoneNumber);
     let newPopup = L.popup().setLatLng(location).setContent(popupContent);
     if (openedPopup != null) {
