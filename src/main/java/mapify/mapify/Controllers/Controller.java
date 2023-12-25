@@ -29,6 +29,7 @@ import netscape.javascript.JSObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -40,6 +41,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Controller implements Initializable {
     private List<User> userList = new ArrayList<>();
     private List<User> usersInRadiusBorders = new ArrayList<>();
+    private File csvFile = null;
     private static final MapGeocode geocodeInstance = new MapGeocode();
     private Location deviceLocation = null;
     private boolean isRadiusChanged = false;
@@ -135,8 +137,9 @@ public class Controller implements Initializable {
 
     private void checkCsvFileFormatAndGetUsersAddresses() {
         CsvParserController csvController = new CsvParserController();
-        if (csvController.checkForFileHeadersAndFormat(fileChooserController.getMainFile())) {
-            userList = csvController.getCSVData(fileChooserController.getMainFile());
+        csvFile = fileChooserController.getMainFile();
+        if (csvController.checkForFileHeadersAndFormat(csvFile)) {
+            userList = csvController.getCSVData(csvFile);
             if (userList.size() != 0) {
                 loadLoaderComponent();
                 CompletableFuture<Void> searchTask = CompletableFuture.runAsync(() -> {
@@ -150,6 +153,9 @@ public class Controller implements Initializable {
                 searchTask.thenRun(() -> {
                     Platform.runLater(() -> {
                         try {
+                            Comparator<User> comparator = Comparator.comparing(User::getDistanceToDeviceLocation,
+                                    Comparator.nullsLast(Integer::compareTo));
+                            userList.sort(comparator);
                             loadUsersListComponent(userList);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -189,7 +195,9 @@ public class Controller implements Initializable {
             loadUserItem(user);
         }
         sideBarContent.getChildren().add(node);
-        addUsersMarkersToMap(userList);
+        if (userList.size() > 0) {
+            addUsersMarkersToMap(userList);
+        }
     }
     private void loadUserItem(User user) throws IOException {
         FXMLLoader userLoader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/userItem.fxml")));
@@ -305,9 +313,25 @@ public class Controller implements Initializable {
                 int circleRadius = (int) downBarSlider.getValue();
                 // invoke the function that changes the circle radius in javascript code
                 invokeJSCodeOnRadiusChange(circleRadius);
+                try {
+                    loadUsersListBasedOnRadius(circleRadius);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 sliderLabel.setText(convertToMeterToKM(circleRadius));
             }
         });
+    }
+    private void loadUsersListBasedOnRadius(int radius) throws IOException {
+        if (csvFile != null) {
+            getUsersInRadiusBorders(radius);
+            if (radius == 0) {
+                loadUsersListComponent(userList);
+
+            } else {
+                loadUsersListComponent(usersInRadiusBorders);
+            }
+        }
     }
     private void invokeJSCodeOnRadiusChange(int radius) {
         // check if the circle radius has changed for the first time
@@ -333,6 +357,7 @@ public class Controller implements Initializable {
     }
     private void getUsersInRadiusBorders(int radius) {
         if (userList.size() > 0) {
+            usersInRadiusBorders.clear();
             for (User user : userList) {
                 if (user.getAddressLocation() != null && user.getDistanceToDeviceLocation() <= radius) {
                     usersInRadiusBorders.add(user);

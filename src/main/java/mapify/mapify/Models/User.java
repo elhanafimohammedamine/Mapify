@@ -10,7 +10,7 @@ public class User {
     private Controller.Location addressLocation;
     private String  durationToDeviceLocationWithFoot;
     private String  durationToDeviceLocationWithCar;
-    private int distanceToDeviceLocation;
+    private Integer distanceToDeviceLocation = null;
 
     public User() {
     }
@@ -76,7 +76,7 @@ public class User {
         this.durationToDeviceLocationWithCar = durationToDeviceLocationWithCar;
     }
 
-    public int getDistanceToDeviceLocation() {
+    public Integer getDistanceToDeviceLocation() {
         return distanceToDeviceLocation;
     }
 

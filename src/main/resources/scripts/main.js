@@ -62,6 +62,7 @@ let userLocation = null
 let openedPopup = null;
 let previousRouting = null;
 let routePolyline = null;
+let usersMarkers = L.layerGroup();
 
 
 
@@ -130,11 +131,14 @@ function goToLocation(lat, lng, icon) {
 }
 
 function setUsersMarker(locations) {
+    usersMarkers.clearLayers();
     let firstUserLat = locations[0].lat
     let firstUserLng = locations[0].lng
     locations.forEach(function(location) {
-        let marker = L.marker([location.lat, location.lng], {icon: userIcon}).addTo(map);
+        let marker = L.marker([location.lat, location.lng], {icon: userIcon});
+        usersMarkers.addLayer(marker)
     });
+    usersMarkers.addTo(map)
     map.setView([firstUserLat, firstUserLng], 13);
 }
 function displayCircle(radius) {
