@@ -36,6 +36,7 @@
 #sliderLabel {
     -fx-font-family: "Poppins Medium", sans-serif;
     -fx-text-fill: #636780;
+    -fx-font-size: 14px;
 }
 .downBarBtn {
     -fx-cursor: hand;
@@ -282,7 +283,7 @@
     -fx-text-fill: #636780;
 }
 .itemsScrollContainer {
-    -fx-padding: 3px;
+    -fx-padding: 10px 3px;
     -fx-background-color: #ffffff;
     -fx-background-radius: 15px;
     -fx-spacing: 5px;

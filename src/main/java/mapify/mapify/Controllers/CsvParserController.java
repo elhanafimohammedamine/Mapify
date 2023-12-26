@@ -2,10 +2,7 @@ package mapify.mapify.Controllers;
 
 import mapify.mapify.Models.User;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class CsvParserController {
@@ -101,6 +98,43 @@ public class CsvParserController {
             formattedHeaders.add(formattedHeader);
         }
         return formattedHeaders;
+    }
+    private List<String> updateCSVFileWithLocation(File csvFile, List<User> users) {
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(csvFile))){
+            String line;
+            while ((line = fileReader.readLine()) != null) {
+                lines.add(line);
+            }
+            String newHeader = lines.get(0) + ",Address Latitude,Address Longitude";
+            lines.set(0,newHeader);
+            for (int i = 1; i < lines.size(); i++) {
+                String userAddressLat = users.get(i -1).getAddressLocation() != null ?
+                        String.valueOf(users.get(i -1).getAddressLocation().latitude()) : "None";
+                String userAddressLng = users.get(i -1).getAddressLocation() != null ?
+                        String.valueOf(users.get(i -1).getAddressLocation().longitude()) : "None";
+                String updatedLine = lines.get(i) + "," + userAddressLat + "," + userAddressLng;
+                lines.set(i, updatedLine);
+                if (i == users.size())
+                    break;
+            }
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return lines;
+    }
+
+    public void copyCsvFileIntoFileToSave(File sourceFile, File fileToSave, List<User> users) {
+        List<String> lines = this.updateCSVFileWithLocation(sourceFile,users);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileToSave))) {
+            for (String line : lines) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static int indexOfHeader(String header, List<String> headers) {

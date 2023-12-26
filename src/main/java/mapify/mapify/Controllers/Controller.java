@@ -12,6 +12,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Arc;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -153,9 +155,9 @@ public class Controller implements Initializable {
                 searchTask.thenRun(() -> {
                     Platform.runLater(() -> {
                         try {
-                            Comparator<User> comparator = Comparator.comparing(User::getDistanceToDeviceLocation,
-                                    Comparator.nullsLast(Integer::compareTo));
-                            userList.sort(comparator);
+                            //Comparator<User> comparator = Comparator.comparing(User::getDistanceToDeviceLocation,
+                            //Comparator.nullsLast(Integer::compareTo));
+                            //userList.sort(comparator);
                             loadUsersListComponent(userList);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -190,6 +192,10 @@ public class Controller implements Initializable {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/mapify/mapify/components/usersList.fxml")));
         Node node = loader.load();
         usersListController = loader.getController();
+        Button saveButton = usersListController.getSaveFileBtn();
+        saveButton.setOnAction(event -> saveFile());
+        Button backButton = usersListController.getBackBtn();
+        backButton.setOnAction(event -> backToFileChooserAndClearMap());
         sideBarContent.getChildren().clear();
         for (User user : userList) {
             loadUserItem(user);
@@ -236,14 +242,19 @@ public class Controller implements Initializable {
             double destinationLng = user.getAddressLocation().longitude;
             engine.executeScript("routingTrack(" + originLat + "," + originLng + "," + destinationLat + "," + destinationLng + ")");
         }
+        else {
+            engine.executeScript("checkIfRouteInMapAndRemoveIt()");
+        }
     }
 
     private void removeDistanceInfosAndRouting() {
-        engine.executeScript("removeRoute()");
+        engine.executeScript("checkIfRouteInMapAndRemoveIt()");
         distanceBarContainer.setVisible(false);
     }
     private void showUserPopup(User user) {
+        addressNotFoundError.setVisible(false);
         if (user.getAddressLocation() == null) {
+            engine.executeScript("checkIfPopupOpened()");
             distanceBarContainer.setVisible(false);
             addressNotFoundError.setVisible(true);
         }
@@ -347,9 +358,11 @@ public class Controller implements Initializable {
             // if the map view is not set to the device location when trying to change the circle radius
             // we set the map view to the device location then change the radius
             if (!isDeviceLocationInMapView()) {
-                String script = "map.setView([" + deviceLocation.latitude() + ", " + deviceLocation.longitude() + "], 13)";
+                String script = "map.setView([" + deviceLocation.latitude() + ", " + deviceLocation.longitude() + "], 12)";
                 engine.executeScript(script);
             }
+            distanceBarContainer.setVisible(false);
+            engine.executeScript("checkIfRouteInMapAndRemoveIt()");
             engine.executeScript("circle.setRadius('" + radius + "')");
         }
     }
@@ -446,6 +459,23 @@ public class Controller implements Initializable {
         });
     }
 
+    public void saveFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save file");
+        fileChooser.setInitialFileName("users");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("csv files","*.csv"));
+        File fileToSave = fileChooser.showSaveDialog(new Stage());
+        if (fileToSave != null) {
+            CsvParserController csvParser = new CsvParserController();
+            csvParser.copyCsvFileIntoFileToSave(this.csvFile, fileToSave, this.userList);
+        }
+    }
+    private void backToFileChooserAndClearMap() {
+        engine.reload();
+        loadSideBarComponent();
+        userList.clear();
+        csvFile = null;
+    }
     public void animateSearchLoader(boolean state){
         searchLoaderContainer.setVisible(state);
         Timeline timeline = new Timeline(

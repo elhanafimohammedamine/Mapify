@@ -11,14 +11,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import mapify.mapify.Models.User;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class FileChooserController implements Initializable {
 
@@ -33,6 +32,7 @@ public class FileChooserController implements Initializable {
     @FXML
     public Button locateBtn;
     private File mainFile = null;
+    private List<User> users = new ArrayList<>();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         fileContainer.setVisible(false);
@@ -61,7 +61,7 @@ public class FileChooserController implements Initializable {
         csvErrorContainer.setVisible(true);
     }
     public File getMainFile() {
-        return mainFile;
+        return this.mainFile;
     }
 
 }

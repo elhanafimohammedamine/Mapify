@@ -125,7 +125,7 @@ function goToDeviceLocation(lat, lng) {
                 deviceMarker = L.marker([lat, lng], {icon: userPositionIcon}).addTo(map)
             }
         }
-        map.setView([lat, lng], 13);
+        map.setView([lat, lng], 12);
     }
 }
 
@@ -138,7 +138,7 @@ function goToLocation(lat, lng) {
         else {
             locationMarker = L.marker([lat, lng], {icon: normalPositionIcon}).addTo(map)
         }
-        map.setView([lat, lng], 13);
+        map.setView([lat, lng], 8);
     }
 }
 function setUsersMarker(locations) {
@@ -151,11 +151,18 @@ function setUsersMarker(locations) {
             usersMarkers.addLayer(marker)
         });
         usersMarkers.addTo(map)
-        map.setView([firstUserLat, firstUserLng], 13);
+        map.setView([firstUserLat, firstUserLng], 8);
+    }
+}
+
+function checkIfRouteInMapAndRemoveIt() {
+    if (routePolyline) {
+        map.removeLayer(routePolyline)
     }
 }
 function displayCircle(radius) {
     if (userLocation !== null) {
+        checkIfRouteInMapAndRemoveIt()
         circle.setLatLng([userLocation.lat, userLocation.lng])
         circle.setRadius(radius)
         circle.addTo(map);
@@ -166,9 +173,7 @@ function routingTrack(originLat, originLng, destinationLat, destinationLng) {
     if (previousRouting === currentRouting) {
         return;
     }
-    if (routePolyline) {
-        map.removeLayer(routePolyline);
-    }
+    checkIfRouteInMapAndRemoveIt()
     let control = L.Routing.control({
         waypoints: [
             L.latLng(originLat, originLng),
@@ -179,7 +184,9 @@ function routingTrack(originLat, originLng, destinationLat, destinationLng) {
     control.on('routesfound', function(e) {
         let route = e.routes[0];
         console.log(route)
-        goToDeviceLocation(originLat, originLng)
+        if (!deviceMarker) {
+            deviceMarker = L.marker([originLat, originLng], {icon: userPositionIcon}).addTo(map)
+        }
         routePolyline = L.polyline(route.coordinates, {
             color: '#553cff',
             opacity: 1,
@@ -190,20 +197,15 @@ function routingTrack(originLat, originLng, destinationLat, destinationLng) {
     })
     previousRouting = currentRouting;
 }
-function removeRoute(){
-    if (routePolyline) {
-        map.removeLayer(routePolyline)
-    }
-}
 
 //routingTrack(35.1646954,-3.8553517,35.1721635,-3.8628263)
 function displayPopup(user) {
     let userObject = JSON.parse(user);
     let location = L.latLng(userObject.lat, userObject.lng);
-    map.setView(location, 13);
+    map.setView(location, 8);
     let popupContent = popUpHtmlContent(userObject.fullName, userObject.address, userObject.phoneNumber);
     let newPopup = L.popup().setLatLng(location).setContent(popupContent);
-    if (openedPopup != null) {
+    if (openedPopup) {
         if (openedPopup !== newPopup) {
             map.removeLayer(openedPopup)
             newPopup.addTo(map)
@@ -218,7 +220,6 @@ function displayPopup(user) {
         openedPopup = newPopup
     }
 }
-
 function getMapView() {
     let center = map.getCenter()
     return {
@@ -227,6 +228,11 @@ function getMapView() {
     }
 }
 
+function checkIfPopupOpened() {
+    if (openedPopup) {
+        map.removeLayer(openedPopup)
+    }
+}
 function popUpHtmlContent(name, address, phoneNumber) {
     return '<div style="display: flex; flex-direction: column; justify-content: center; align-items: start; row-gap: 8px;">' +
         '<div style="display: flex; justify-content: center; align-items: center; column-gap: 10px;">' +

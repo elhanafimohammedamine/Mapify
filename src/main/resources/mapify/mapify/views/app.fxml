@@ -227,8 +227,8 @@
             </Button>
             <HBox fx:id="downBarSliderContainer" prefHeight="38.0" prefWidth="240.0" spacing="10.0">
                <children>
-                  <Slider fx:id="downBarSlider" blockIncrement="1.0" max="5000.0" prefHeight="18.0" prefWidth="150.0" style="fx: #4a48ff;" />
-                  <Label fx:id="sliderLabel" prefHeight="18.0" prefWidth="70.0" text="1000 m" />
+                  <Slider fx:id="downBarSlider" blockIncrement="1.0" max="10000.0" prefHeight="18.0" prefWidth="150.0" style="fx: #4a48ff;" />
+                  <Label fx:id="sliderLabel" prefHeight="18.0" prefWidth="57.0" text="1000 m" />
                </children>
             </HBox>
          </children></HBox>
