@@ -141,7 +141,7 @@
             </Button>
          </children>
       </HBox>
-      <HBox fx:id="MapLayersMenu" layoutX="524.0" layoutY="506.0" prefHeight="100.0" prefWidth="444.0" spacing="10.0" styleClass="visibilityAnimation" stylesheets="@../assets/css/app.css">
+      <HBox fx:id="MapLayersMenu" layoutX="524.0" layoutY="503.0" prefHeight="100.0" prefWidth="444.0" spacing="10.0" styleClass="visibilityAnimation" stylesheets="@../assets/css/app.css">
          <children>
             <Button fx:id="defaultLayer" mnemonicParsing="false" onAction="#changeMapLayer" prefHeight="85.0" prefWidth="82.0" styleClass="downBarBtn">
                <graphic>

@@ -4,6 +4,7 @@ import mapify.mapify.Models.User;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class CsvParserController {
     private HashMap<String, Integer> headersIndexes = new HashMap<>();
@@ -45,8 +46,9 @@ public class CsvParserController {
             String line;
             boolean headersProcessed = false;
             String[] headers = null;
+            Pattern pattern = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
             while ((line = fileReader.readLine()) != null) {
-                String[] values = line.split(",");
+                String[] values = pattern.split(line);
                 if (!headersProcessed) {
                     headers = values;
                     headersProcessed = true;

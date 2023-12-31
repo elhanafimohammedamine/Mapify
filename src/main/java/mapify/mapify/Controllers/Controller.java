@@ -45,7 +45,7 @@ public class Controller implements Initializable {
     private List<User> usersInRadiusBorders = new ArrayList<>();
     private File csvFile = null;
     private static final MapGeocode geocodeInstance = new MapGeocode();
-    private Location deviceLocation = null;
+    private Location deviceLocation = new Location(35.1717969,-3.8618102);
     private boolean isRadiusChanged = false;
     private static WebEngine engine;
     @FXML
@@ -215,7 +215,7 @@ public class Controller implements Initializable {
             usersListController.addUserComponentToList(userItem);
         }
     }
-    private void addUsersMarkersToMap(List<User> users) {
+    private void addUsersMarkersToMap(List<User> users) throws IOException {
         JSONArray jsonArray = new JSONArray();
         for (User user : users) {
             if(user.getAddressLocation() != null) {
@@ -227,6 +227,7 @@ public class Controller implements Initializable {
         }
         String jsonString = jsonArray.toString();
         engine.executeScript("setUsersMarker(" + jsonString + ")");
+        getCurrentLocation();
     }
     private void showDistanceInfos(User user) {
         if (user.getAddressLocation() != null) {

@@ -138,7 +138,7 @@ function goToLocation(lat, lng) {
         else {
             locationMarker = L.marker([lat, lng], {icon: normalPositionIcon}).addTo(map)
         }
-        map.setView([lat, lng], 8);
+        map.setView([lat, lng], 12);
     }
 }
 function setUsersMarker(locations) {
@@ -151,7 +151,7 @@ function setUsersMarker(locations) {
             usersMarkers.addLayer(marker)
         });
         usersMarkers.addTo(map)
-        map.setView([firstUserLat, firstUserLng], 8);
+        map.setView([firstUserLat, firstUserLng], 12);
     }
 }
 
@@ -183,7 +183,6 @@ function routingTrack(originLat, originLng, destinationLat, destinationLng) {
     }).addTo(map)
     control.on('routesfound', function(e) {
         let route = e.routes[0];
-        console.log(route)
         if (!deviceMarker) {
             deviceMarker = L.marker([originLat, originLng], {icon: userPositionIcon}).addTo(map)
         }
@@ -202,7 +201,7 @@ function routingTrack(originLat, originLng, destinationLat, destinationLng) {
 function displayPopup(user) {
     let userObject = JSON.parse(user);
     let location = L.latLng(userObject.lat, userObject.lng);
-    map.setView(location, 8);
+    map.setView(location, 12);
     let popupContent = popUpHtmlContent(userObject.fullName, userObject.address, userObject.phoneNumber);
     let newPopup = L.popup().setLatLng(location).setContent(popupContent);
     if (openedPopup) {

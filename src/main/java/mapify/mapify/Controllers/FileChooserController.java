@@ -40,6 +40,7 @@ public class FileChooserController implements Initializable {
     }
     public void chooseFileAction(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("choose you csv file");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("csv files","*.csv"));
         File selectedFile = fileChooser.showOpenDialog(null);
 
