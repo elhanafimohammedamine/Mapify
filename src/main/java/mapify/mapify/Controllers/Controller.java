@@ -92,6 +92,14 @@ public class Controller implements Initializable {
     private Arc searchLoader;
     @FXML
     private AnchorPane searchLoaderContainer;
+    @FXML
+    private VBox APIContainer;
+    @FXML
+    private Button settingsBtn;
+    @FXML
+    private TextField APIKeyInput;
+    @FXML
+    private Button SaveApiKey;
     private FileChooserController fileChooserController = null;
     private UsersListController usersListController = null;
     private LoaderController loaderController = null;
@@ -106,6 +114,7 @@ public class Controller implements Initializable {
         searchLoaderContainer.setVisible(false);
         distanceBarContainer.setVisible(false);
         addressNotFoundError.setVisible(false);
+        APIContainer.setVisible(false);
         addressErrorCloseBtn.setOnAction(event -> addressNotFoundError.setVisible(false));
         loadSideBarComponent();
         handleRadiusChange();
@@ -226,8 +235,8 @@ public class Controller implements Initializable {
             }
         }
         String jsonString = jsonArray.toString();
-        engine.executeScript("setUsersMarker(" + jsonString + ")");
         getCurrentLocation();
+        engine.executeScript("setUsersMarker(" + jsonString + "," + deviceLocation.latitude + "," + deviceLocation.longitude + ")");
     }
     private void showDistanceInfos(User user) {
         if (user.getAddressLocation() != null) {
@@ -269,6 +278,43 @@ public class Controller implements Initializable {
             String userJson = json.toString();
             engine.executeScript("displayPopup('" + userJson + "')");
         }
+    }
+    public void showApiInput() {
+        boolean visibility = APIContainer.isVisible();
+        FadeTransition fadeTransition = new FadeTransition(Duration.millis(200), APIContainer);
+        if (visibility) {
+            fadeTransition.setToValue(0);
+        } else {
+            fadeTransition.setToValue(1);
+        }
+        fadeTransition.setOnFinished(ev -> APIContainer.setVisible(!visibility));
+        fadeTransition.play();
+        // hide map layers menu when clicking outside the button
+        Scene scene = APIContainer.getScene();
+        if (scene != null) {
+            ((Scene) scene).setOnMouseClicked(e -> {
+                if (!APIContainer.getBoundsInParent().contains(e.getX(), e.getY())) {
+                    fadeTransition.setToValue(0);
+                    fadeTransition.setOnFinished(ev -> APIContainer.setVisible(false));
+                    fadeTransition.play();
+                    scene.setOnMouseClicked(null);
+                    String buttonStyle = "downBarBtn";
+                    settingsBtn.getStyleClass().clear();
+                    settingsBtn.getStyleClass().add(buttonStyle);
+                }
+            });
+        }
+        // changing button style when it is clicked
+        String buttonStyle = visibility ? "downBarBtn" : "downBarBtnClicked" ;
+        settingsBtn.getStyleClass().clear();
+        settingsBtn.getStyleClass().add(buttonStyle);
+    }
+    public void ChangeApiKey(ActionEvent event) {
+        String newApiKey = APIKeyInput.getText();
+        if (!newApiKey.equals(" ")) {
+            geocodeInstance.setGoogleMapKey(newApiKey);
+        }
+        showApiInput();
     }
     public void showMapLayerMenu() {
         boolean visibility = MapLayersMenu.isVisible();

@@ -11,11 +11,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 public class MapGeocode {
-    private final String googleMapKey = System.getenv("GOOGLE_API_KEY");
+    private String googleMapKey = System.getenv("GOOGLE_API_KEY");
     private static final String IP_API_URL = "https://ipinfo.io/json";
     private ArrayList<LocationResult> predictedLocations = new ArrayList<>();
     public MapGeocode() {
@@ -139,6 +142,9 @@ public class MapGeocode {
                 .replaceAll(" ", "%2C")
                 .replaceAll("<", "")
                 .replaceAll(">","");
+    }
+    public void setGoogleMapKey(String googleMapKey) {
+        this.googleMapKey = googleMapKey;
     }
     public record Distance(int distanceValue, String durationText) {
 

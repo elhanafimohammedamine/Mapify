@@ -11,9 +11,9 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="589.0" prefWidth="271.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapify.mapify.Controllers.FileChooserController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="547.0" prefWidth="271.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapify.mapify.Controllers.FileChooserController">
    <children>
-      <VBox fx:id="fileChooserContainer" prefHeight="589.0" prefWidth="271.0" stylesheets="@../assets/css/app.css">
+      <VBox fx:id="fileChooserContainer" prefHeight="547.0" prefWidth="271.0" stylesheets="@../assets/css/app.css">
          <children>
             <VBox prefHeight="32.0" prefWidth="250.0" styleClass="mainHeadingContainer">
                <children>

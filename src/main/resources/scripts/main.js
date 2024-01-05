@@ -141,13 +141,16 @@ function goToLocation(lat, lng) {
         map.setView([lat, lng], 12);
     }
 }
-function setUsersMarker(locations) {
+function setUsersMarker(locations, deviceLat, deviceLng) {
     usersMarkers.clearLayers();
     if (locations.length > 0) {
         let firstUserLat = locations[0].lat
         let firstUserLng = locations[0].lng
         locations.forEach(function(location) {
             let marker = L.marker([location.lat, location.lng], {icon: userIcon});
+            marker.on('click', () => {
+                routingTrack(deviceLat, deviceLng, location.lat, location.lng)
+            })
             usersMarkers.addLayer(marker)
         });
         usersMarkers.addTo(map)

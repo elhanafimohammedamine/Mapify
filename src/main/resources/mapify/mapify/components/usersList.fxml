@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="589.0" prefWidth="271.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapify.mapify.Controllers.UsersListController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="547.0" prefWidth="271.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mapify.mapify.Controllers.UsersListController">
    <children>
-      <VBox fx:id="usersListContainer" prefHeight="589.0" prefWidth="271.0" stylesheets="@../assets/css/app.css">
+      <VBox fx:id="usersListContainer" prefHeight="547.0" prefWidth="271.0" stylesheets="@../assets/css/app.css">
          <children>
             <VBox prefHeight="18.0" prefWidth="250.0" styleClass="mainHeadingContainer">
                <children>

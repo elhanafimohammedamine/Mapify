@@ -69,5 +69,10 @@
             </HBox>
          </children>
       </VBox>
+      <Label layoutX="413.0" layoutY="652.0" text="Developed By : Mohammed Amine El Hanafi &amp; Achraf Daharoui" textFill="#302c5e">
+         <font>
+            <Font name="Poppins Regular" size="12.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
